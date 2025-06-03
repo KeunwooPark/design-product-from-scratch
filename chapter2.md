@@ -20,9 +20,9 @@
 
 데이터를 수집하는 방법은 다양하게 있다. 직접 사용자를 인터뷰하거나 설문조사를 하는 방법이 있다. 동행 관찰 (shadowing)은 사용자를 따라다니면서 실제 사용자의 행동을 관찰하는 방법이고, 몰래 관찰하기 (fly-on-the-wall observation)는 직접 개입 없이 사용자들 몰래 사용자들을 관찰하는 방법이다. 여기에서 다양한 방법들을 모두 소개하는 것은 어려우니 참고하면 좋은 책들과 자료들을 추천 하겠다.
 
-- [디자인 방법론 불변의 법칙 100가지 (벨라 마틴 , 브루스 해밍턴)](https://product.kyobobook.co.kr/detail/S000001226665): 이 책에 다양한 방법론들이 나와있는데 자신의 상황에 맞는 방법론을 차용하거나 새롭게 만들어서 진행하면 좋다.
-- [유저 리서치: UX를 위한 사용자 조사의 모든것 (스테파니 마시)](https://www.aladin.co.kr/shop/wproduct.aspx?itemid=264314099&srsltid=afmbooowgxrcktrgkm1vgr4gu6z15ht5ocqq4amal_gstc9a4s638w5r): 데이터 수집 방법론 뿐만 아니라 유저 리서치 전반에 대해 종합적이고 자세하게 설명하는 책이다.
-- [Research Methods in Human-Computer Interaction (Jonathan Lazar)](https://www.amazon.com/Research-Methods-Human-Computer-Interaction-Jonathan/dp/0470723378): 영어가 부담스럽지 않다면 이 책을 추천한다. 양적 연구와 질적 연구를 모두 아우르는 데이터 수집 방법들을 매우 자세히 소개한다.
+- [디자인 방법론 불변의 법칙 100가지 - 벨라 마틴 , 브루스 해밍턴](https://product.kyobobook.co.kr/detail/S000001226665): 이 책에 다양한 방법론들이 나와있는데 자신의 상황에 맞는 방법론을 차용하거나 새롭게 만들어서 진행하면 좋다.
+- [유저 리서치: UX를 위한 사용자 조사의 모든것 - 스테파니 마시](https://www.aladin.co.kr/shop/wproduct.aspx?itemid=264314099&srsltid=afmbooowgxrcktrgkm1vgr4gu6z15ht5ocqq4amal_gstc9a4s638w5r): 데이터 수집 방법론 뿐만 아니라 유저 리서치 전반에 대해 종합적이고 자세하게 설명하는 책이다.
+- [Research Methods in Human-Computer Interaction - Jonathan Lazar](https://www.amazon.com/Research-Methods-Human-Computer-Interaction-Jonathan/dp/0470723378): 영어가 부담스럽지 않다면 이 책을 추천한다. 양적 연구와 질적 연구를 모두 아우르는 데이터 수집 방법들을 매우 자세히 소개한다.
 
 다양한 방법론들을 외우고 있을 필요는 없지만 대략 어떤 것들이 있는지 머릿속에 담고 있는 것은 유용하다. 내가 필요할 때 꺼내서 사용할 수 있는 공구 상자와 같은 역할을 할 수 있기 때문이다. 하지만 방법론들에 대해서 혼동하면 안되는 것이 이것들은 '프로세스'가 아니다. 정해진 규칙이 있고 그 규칙을 꼭 따라가야만 하는 것이 아니라는 것이다. 방법론은 변형하거나 조합하여 사용하게 되는 경우도 많이 있다. 목적을 달성하는 것에 집중을 해야 하고 방법론을 따라가는 것에 집중해서는 안된다.
 
@@ -59,7 +59,7 @@
 HMW 질문들을 보면 사용자의 니즈이면서 우리가 해결해야 하는 문제이다. HMW 질문들은 다음과 같은 과정을 통해 도출 할 수 있다.
 
 1. 포스트잇 또는 빈 카드를 여러장 준비한다.
-2. 카드에 무엇을 하면 문제를 해결 할 수 있을지 적는다. (예: )
+2. 카드에 무엇을 하면 문제를 해결 할 수 있을지 적는다.
 3. 카드들을 가지고 친화도 다이어그램을 구성한다.
 4. 다 같이 투표를 한다. (한 명이 하나 이상에 투표 할 수도 있다.)
 5. 투표를 통해 중요하다고 판단된 몇 개의 HMW 질문들을 추려낸다.
