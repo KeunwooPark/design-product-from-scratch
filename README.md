@@ -36,6 +36,7 @@
 5. [mid-fi 프로토타이핑](chapter5.md)
 6. [디자인 커뮤니케이션 하기](chapter6.md)
 7. [리포트 작성](chapter7.md)
+8. [끝없는 과정](chapter8.md)
 
 ### 구성에 관하여
 
