@@ -1,0 +1,36 @@
+% Chapter 3: expand (diverge) and converge.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[xscale=0.95,
+    idea/.style={circle, fill=soft, inner sep=0pt, minimum size=2.2mm},
+    good/.style={circle, fill=ink, inner sep=0pt, minimum size=2.6mm},
+    endpt/.style={draw=ink, fill=white, line width=0.9pt, rounded corners=1mm, font=\figsmall\bfseries, align=center, inner sep=1.5mm},
+  ]
+  \coordinate (L) at (0,0);
+  \coordinate (T) at (36mm,15mm);
+  \coordinate (B) at (36mm,-15mm);
+  \coordinate (R) at (72mm,0);
+  \fill[pale] (L) -- (T) -- (R) -- (B) -- cycle;
+  \draw[ink, line width=0.8pt] (L) -- (T) -- (R) -- (B) -- cycle;
+  \draw[mid, dashed, line width=0.5pt] (T) -- (B);
+
+  % ideas: many on the left half, the chosen few carried to the right
+  \foreach \x/\y in {8/1, 13/-3, 19/1, 23/-1, 26/5, 28/-4, 29/10, 30/1, 32/7, 33/-6, 21/-5, 11/-1, 35/-2, 34/12}
+    \node[idea] at (\x mm, \y mm) {};
+  \node[good] (g1) at (30mm, 6mm) {};
+  \node[good] (g2) at (26mm,-7mm) {};
+  \node[good] (g3) at (17mm, 1mm) {};
+  \node[good] (h1) at (46mm, 4mm) {};
+  \node[good] (h2) at (48mm,-4mm) {};
+  \node[good] (h3) at (58mm, 0mm) {};
+  \foreach \a/\b in {g1/h1, g2/h2, g3/h2, h1/h3, h2/h3} \draw[mid, line width=0.4pt] (\a) -- (\b);
+
+  \node[endpt, anchor=east] at ($(L)+(-1.5mm,0)$) {문제\\(HMW)};
+  \node[endpt, anchor=west] at ($(R)+(1.5mm,0)$) {솔루션};
+
+  \node[font=\figtext\bfseries, anchor=south] at (18mm,20.5mm) {확장};
+  \node[font=\figsmall, text=mid, anchor=south] at (18mm,16.5mm) {다양한 아이디어 쏟아내기};
+  \node[font=\figtext\bfseries, anchor=south] at (54mm,20.5mm) {수렴};
+  \node[font=\figsmall, text=mid, anchor=south] at (54mm,16.5mm) {좋은 아이디어 추려내기};
+\end{tikzpicture}
+\end{fig}\end{document}

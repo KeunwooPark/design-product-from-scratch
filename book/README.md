@@ -7,10 +7,12 @@ make book     # build/book.pdf   interior, 138x198mm pages (128x188 trim + 5mm b
 make cover    # build/cover.pdf  back + spine + front, with 5mm bleed
 make guides   # build/cover-guides.pdf  cover with cut / spine / safe-area lines
 make pages    # print the interior page count
+make figures  # img/<name>.pdf + img/<name>.png from figures/<name>.tex
 ```
 
 Requirements: `pandoc` and TeX Live with XeLaTeX (`xetexko`, `titlesec`,
-`fancyhdr`, `footmisc`, `xurl`, `float`, `enumitem`, `tikz`), Noto CJK KR fonts.
+`fancyhdr`, `footmisc`, `xurl`, `float`, `enumitem`, `tikz`), Noto CJK KR fonts,
+and `pdftocairo` (poppler) for the figure PNGs.
 
 | File | What it controls |
 |---|---|
@@ -18,7 +20,20 @@ Requirements: `pandoc` and TeX Live with XeLaTeX (`xetexko`, `titlesec`,
 | `book.tex` | interior layout: headings, running heads, TrimBox/BleedBox |
 | `book.lua` | Markdown → print adjustments (links → footnotes, README → 들어가며) |
 | `cover.tex` | cover design and text |
+| `../figures/*.tex` | diagrams (TikZ, grayscale, drawn at the 95mm text width) |
 | `cover-template.pdf` | printer's (RedPrinting) template, not committed |
+
+## Figures
+
+Each diagram is a TikZ file in `figures/` sharing `figures/_preamble.tex`.
+`make figures` writes two files per diagram into `img/`, and both are committed:
+
+- `img/<name>.png` (300dpi, white background) is what the Markdown links to,
+  so the pages render on GitHub.
+- `img/<name>.pdf` (vector) is what the print book uses: `book.lua` swaps a
+  `.png` link for the `.pdf` next to it.
+
+The Markdown alt text becomes the figure caption in the book.
 
 ## Spine width
 

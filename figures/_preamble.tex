@@ -1,0 +1,48 @@
+% Shared preamble for the book's diagrams.
+%
+% Each figures/<name>.tex is a standalone TikZ picture. `make figures` builds
+%   img/<name>.pdf  vector, used by the print book (book/book.lua swaps it in)
+%   img/<name>.png  300dpi, white background, used by the Markdown on GitHub
+%
+% Figures are drawn to fit the print text block (95mm wide) at 1:1 scale, in
+% grayscale only so they survive black-and-white printing.
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage[hangul]{xetexko}
+\setmainfont{Noto Sans CJK KR}
+\setmainhangulfont{Noto Sans CJK KR}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,decorations.pathmorphing,decorations.pathreplacing,shapes.geometric,backgrounds}
+
+% Grays (print-safe)
+\definecolor{ink}{gray}{0.12}   % lines and text
+\definecolor{mid}{gray}{0.45}   % secondary text, guides
+\definecolor{soft}{gray}{0.72}  % light strokes
+\definecolor{lite}{gray}{0.90}  % filled shapes (sticky notes, boxes)
+\definecolor{pale}{gray}{0.96}  % large background areas
+
+% Font sizes in pt, relative to the 9.5pt body text.
+\newcommand\figtext{\fontsize{7.5}{10}\selectfont}
+\newcommand\figsmall{\fontsize{6.5}{8.5}\selectfont}
+\newcommand\figtiny{\fontsize{5.5}{7}\selectfont}
+
+\tikzset{
+  every picture/.style={line width=0.6pt, draw=ink, text=ink, font=\figtext, >={Stealth[length=2.2mm,width=1.6mm]}},
+  arr/.style={->, draw=ink, line width=0.6pt},
+}
+\setlength\parindent{0pt}
+\pagestyle{empty}
+% Break Korean lines only at spaces (between words), not between syllables,
+% which reads better in narrow diagram boxes.
+\AtBeginDocument{\XeTeXlinebreakpenalty=10000 }
+
+% Crop each page to its picture (+1mm border); TeX Live here has no
+% standalone/preview packages. Wrap the tikzpicture in \begin{fig}...\end{fig}.
+\newsavebox\figbox
+\newenvironment{fig}{\begin{lrbox}{\figbox}}{\end{lrbox}\shipfig}
+\newcommand\shipfig{%
+  \hoffset=-1in \voffset=-1in
+  \pdfpagewidth=\dimexpr\wd\figbox+2mm\relax
+  \pdfpageheight=\dimexpr\ht\figbox+\dp\figbox+2mm\relax
+  \shipout\vbox{\kern1mm\hbox{\kern1mm\usebox\figbox}\kern\dp\figbox\kern1mm}}
