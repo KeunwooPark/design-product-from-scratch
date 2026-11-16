@@ -1,0 +1,29 @@
+% Chapter 2: HMW cards after dot voting. The top three are selected.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    card/.style={draw=soft, fill=white, line width=0.5pt, text width=26mm, minimum height=17mm, inner sep=1.8mm, font=\figsmall, align=left, anchor=north west},
+    picked/.style={card, draw=ink, line width=1.3pt},
+    dot/.style={circle, fill=ink, inner sep=0pt, minimum size=1.9mm},
+  ]
+  % #1 x, #2 y, #3 style, #4 votes, #5 text
+  \def\hmw#1#2#3#4#5{%
+    \node[#3] (n) at (#1*31.5mm, -#2*23mm) {#5};
+    \foreach \i in {1,...,#4} \node[dot] at ($(n.south west)+(1.8mm+\i*2.6mm-2.6mm, -2mm)$) {};
+  }
+  \hmw{0}{0}{picked}{5}{어떻게 하면 주문 후에 고객들이 카페 안쪽으로 들어가게 할 수 있을까?}
+  \hmw{1}{0}{picked}{4}{어떻게 하면 주문을 카페 안쪽에서 할 수 있을까?}
+  \hmw{2}{0}{picked}{3}{어떻게 하면 카페 밖에서도 주문을 할 수 있게 할까?}
+  \hmw{0}{1}{card}{2}{어떻게 하면 음료가 나오는 시간을 고객이 알 수 있을까?}
+  \hmw{1}{1}{card}{1}{어떻게 하면 메뉴 고민 시간을 줄일 수 있을까?}
+  \hmw{2}{1}{card}{1}{어떻게 하면 결제를 더 빨리 끝낼 수 있을까?}
+
+  % legend
+  \node[dot] (ld) at (0.9mm, -50mm) {};
+  \node[font=\figsmall, text=mid, anchor=west] at ($(ld.east)+(0.8mm,0)$) {= 1표};
+  \draw[ink, line width=1.3pt] (14mm,-48.6mm) rectangle (19mm,-51.4mm);
+  \node[font=\figsmall, text=mid, anchor=west] at (19.6mm,-50mm) {= 집중할 니즈로 선택};
+  \draw[soft, line width=0.5pt] (50mm,-48.6mm) rectangle (55mm,-51.4mm);
+  \node[font=\figsmall, text=mid, anchor=west] at (55.6mm,-50mm) {= 보관해 두었다가 개선 때 사용};
+\end{tikzpicture}
+\end{fig}\end{document}

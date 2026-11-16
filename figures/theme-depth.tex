@@ -1,0 +1,20 @@
+% Chapter 2: a surface-level theme vs. a theme that goes one level deeper.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    card/.style={text width=84mm, inner sep=2.5mm, align=left, font=\figsmall},
+    head/.style={font=\figsmall\bfseries, anchor=south west, inner sep=0.5mm},
+  ]
+  \node[card, draw=soft, dashed, line width=0.6pt, anchor=north west] (bad) at (0,0)
+    {음료를 기다리는 고객들이 카페 입구에서 대기하므로 인해 새롭게 입장하는 고객들이 불편을 느끼고 입장 후 주문까지 시간이 오래 걸린다.\par
+     {\color{mid}→ 현상을 묘사하는 데 그친다.}};
+  \node[head, text=mid] at ($(bad.north west)+(0,0.8mm)$) {표면적인 주제};
+
+  \node[card, draw=ink, line width=1.1pt, anchor=north west] (good) at ($(bad.south west)+(0,-11mm)$)
+    {주문하는 곳과 음료를 받는 곳이 나란히 붙어 있기 때문에 음료를 대기하는 고객들이 입장 고객의 동선을 막게 되고 모든 고객들이 불편을 느낀다.\par
+     {\color{mid}→ 키오스크는 지금 주문을 받는 곳과 다른 위치에 있어야 한다는 함의가 보인다.}};
+  \node[head] at ($(good.north west)+(0,0.8mm)$) {한 단계 더 들어간 주제};
+
+  \draw[arr, draw=mid] ($(bad.south)+(0,-0.5mm)$) -- node[right=1mm, font=\figsmall, text=mid] {왜 입구에서 기다릴 수밖에 없을까?} ($(good.north)+(0,4.5mm)$);
+\end{tikzpicture}
+\end{fig}\end{document}

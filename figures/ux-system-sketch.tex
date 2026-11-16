@@ -1,0 +1,24 @@
+% Chapter 1: UX system sketch of 경험커피 (redrawn from the hand sketch).
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    actor/.style={circle, draw=ink, line width=0.8pt, fill=lite, minimum size=14mm, font=\figtext\bfseries},
+    lbl/.style={font=\figsmall, fill=white, inner sep=1pt},
+  ]
+  \node[actor] (c) at (0,0)    {고객};
+  \node[actor] (a) at (36mm,0) {알바};
+  \node[actor] (o) at (72mm,0) {사장};
+
+  % order flow (bottom, left to right)
+  \draw[arr] (c.-35) to[bend right=35] node[lbl, below=1pt] {2. 주문 및 결제} (a.-145);
+  \draw[arr] (a.-35) to[bend right=35] node[lbl, below=1pt] {3. 주문 전달} (o.-145);
+
+  % drink flow (top, right to left)
+  \draw[arr] (o.145) to[bend right=35] node[lbl, above=1pt] {5. 음료 전달} (a.35);
+  \draw[arr] (a.145) to[bend right=35] node[lbl, above=1pt] {6. 음료 제공} (c.35);
+
+  % self loops
+  \draw[arr] (c.115) to[out=110, in=70, looseness=7] node[lbl, above=0pt] {1. 대기} (c.65);
+  \draw[arr] (o.115) to[out=110, in=70, looseness=7] node[lbl, above=0pt] {4. 음료 제조} (o.65);
+\end{tikzpicture}
+\end{fig}\end{document}

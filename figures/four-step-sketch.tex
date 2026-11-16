@@ -1,0 +1,45 @@
+% Chapter 3: the Sprint four-step sketch on a time axis, and the shortened
+% version that stops at the eight ideas and converges together.
+% 1 minute = 1.05mm.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    seg/.style={draw=ink, line width=0.6pt, minimum height=8mm, inner sep=0pt, font=\figsmall, align=center, anchor=west},
+    later/.style={seg, dashed, fill=white},
+    rowlabel/.style={font=\figsmall\bfseries, anchor=south west, inner sep=0.5mm},
+  ]
+  \def\m{1.05mm}
+  % row 1: original
+  \node[rowlabel] at (0,4.8mm) {스프린트의 four-step sketch};
+  \node[seg, fill=pale,  minimum width=20*\m] (a1) at (0,0)        {정보 수집\\20분};
+  \node[seg, fill=lite,  minimum width=20*\m] (a2) at (a1.east)    {아이디어\\20분};
+  \node[seg, fill=soft,  minimum width=8*\m]  (a3) at (a2.east)    {8분};
+  \node[seg, fill=mid, text=white, minimum width=30*\m] (a4) at (a3.east) {솔루션 구체화\\30분};
+  \node[font=\figsmall, text=mid, anchor=west] at ($(a4.east)+(1mm,0)$) {공유};
+
+  % row 2: shortened
+  \node[rowlabel] at (0,-11.2mm) {세션을 짧게 바꾼 방법};
+  \node[seg, fill=pale,  minimum width=20*\m] (b1) at (0,-16mm)    {정보 수집\\20분};
+  \node[seg, fill=lite,  minimum width=20*\m] (b2) at (b1.east)    {아이디어\\20분};
+  \node[seg, fill=soft,  minimum width=8*\m]  (b3) at (b2.east)    {8분};
+  \node[seg, fill=white, minimum width=12*\m] (b4) at (b3.east)    {수렴\\(투표)};
+  \node[later, minimum width=18*\m] (b5) at ($(b4.east)+(4mm,0)$) {구체화\\(따로, 소수)};
+  \draw[mid, line width=0.5pt] ($(b4.east)+(1.3mm,-1.5mm)$) -- ++(0.6mm,3mm) ($(b4.east)+(2.3mm,-1.5mm)$) -- ++(0.6mm,3mm);
+
+  % the 8 ideas label shared by both rows
+  \node[font=\figtiny, text=mid, align=center] (lab) at ($(a3.south)!0.5!(b3.north)$) {아이디어 8개};
+  \draw[mid, line width=0.4pt] (lab.north) -- (a3.south) (lab.south) -- (b3.north);
+
+  % one-hour line
+  % (drawn behind the bars, so it shows only between them)
+  \begin{scope}[on background layer]
+    \draw[ink, dashed, line width=0.6pt] (60*\m, 8.5mm) node[above, font=\figsmall\bfseries, inner sep=0.5mm] {1시간} -- (60*\m, -24.5mm);
+  \end{scope}
+  % time axis
+  \draw[mid, line width=0.4pt] (0,-24.5mm) -- (80*\m,-24.5mm);
+  \foreach \t in {0,20,40,60,80} {
+    \draw[mid, line width=0.4pt] (\t*\m,-24.5mm) -- ++(0,-1mm);
+    \node[font=\figtiny, text=mid, below] at (\t*\m,-25.3mm) {\t분};
+  }
+\end{tikzpicture}
+\end{fig}\end{document}

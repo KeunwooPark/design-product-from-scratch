@@ -1,0 +1,31 @@
+% Chapter 2: from purpose to needs, with the 경험커피 example for each step.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    stepbox/.style={draw=ink, line width=0.7pt, fill=lite, minimum width=21mm, minimum height=9mm, font=\figtext\bfseries, align=center},
+    outbox/.style={stepbox, fill=white, line width=1.1pt},
+    ex/.style={font=\figsmall, text width=50mm, align=left, anchor=west},
+    brace/.style={decorate, decoration={brace, amplitude=1.6mm, mirror}, draw=mid, line width=0.6pt},
+  ]
+  \def\gap{13mm}
+  \node[stepbox] (s1) at (0,0)        {목적 설정};
+  \node[stepbox] (s2) at (0,-\gap)    {데이터 수집};
+  \node[stepbox] (s3) at (0,-2*\gap)  {분석};
+  \node[outbox]  (s4) at (0,-3*\gap)  {인사이트};
+  \node[outbox]  (s5) at (0,-4*\gap)  {니즈 (HMW)};
+  \foreach \a/\b in {s1/s2, s2/s3, s3/s4, s4/s5} \draw[arr] (\a) -- (\b);
+
+  \node[ex] at ($(s1.east)+(4mm,0)$) {평일 점심 시간에 대기 시간이 길어지는 이유 파악};
+  \node[ex] at ($(s2.east)+(4mm,0)$) {점심 시간에 매장 안에서 벌어지는 일을 관찰};
+  \node[ex] at ($(s3.east)+(4mm,0)$) {관찰 기록을 포스트잇으로 옮겨 친화도 다이어그램으로 묶기};
+  \node[ex] at ($(s4.east)+(4mm,0)$) {주문하는 곳과 음료 받는 곳이 붙어 있어 대기 고객이 입장 동선을 막는다};
+  \node[ex] at ($(s5.east)+(4mm,0)$) {어떻게 하면 주문을 카페 안쪽에서 할 수 있을까?};
+  \node[font=\figsmall\bfseries, text=mid, anchor=south west] at ($(s1.north east)+(4mm,1.5mm)$) {경험커피의 예};
+
+  % section brackets on the left
+  \draw[brace] ($(s1.north west)+(-2mm,0)$) -- ($(s4.south west)+(-2mm,0)$)
+    node[midway, left=2.5mm, font=\figsmall, text=mid, align=center] {사용자\\이해하기};
+  \draw[brace] ($(s5.north west)+(-2mm,0)$) -- ($(s5.south west)+(-2mm,0)$)
+    node[midway, left=2.5mm, font=\figsmall, text=mid, align=center] {니즈\\도출하기};
+\end{tikzpicture}
+\end{fig}\end{document}

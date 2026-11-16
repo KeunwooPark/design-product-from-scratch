@@ -1,0 +1,78 @@
+% Chapter 5: the same 경험커피 kiosk order screen at three levels of fidelity.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}
+  \def\W{28mm}\def\H{46mm}
+
+  % ---------------- 1. paper prototype (hand-drawn) ----------------
+  \begin{scope}[shift={(0,0)}]
+    \pgfmathsetseed{3}
+    \tikzset{hand/.style={decorate, decoration={random steps, segment length=1.6mm, amplitude=0.22mm}, line width=0.7pt, draw=ink, line cap=round, line join=round}}
+    \draw[hand] (0,0) rectangle (\W,\H);
+    \node[font=\figsmall\bfseries] at (14mm,42.5mm) {경험커피};
+    \draw[hand] (2mm,39mm) -- (26mm,39mm);
+    \foreach \x/\t in {2/커피, 10/라떼, 18/차} {
+      \draw[hand] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
+      \node[font=\figtiny] at (\x mm+3.75mm,35.75mm) {\t};
+    }
+    \foreach \x/\y/\t in {2/19/아아, 15/19/라떼, 2/5.5/바닐라, 15/5.5/녹차} {
+      \draw[hand] (\x mm,\y mm+5mm) rectangle (\x mm+11mm,\y mm+13mm);
+      \draw[hand] (\x mm+3mm,\y mm+7mm) -- (\x mm+4mm,\y mm+11mm) -- (\x mm+7mm,\y mm+11mm) -- (\x mm+8mm,\y mm+7mm) -- cycle;
+      \node[font=\figtiny] at (\x mm+5.5mm,\y mm+2.5mm) {\t};
+    }
+    \draw[hand] (2mm,1.5mm) rectangle (26mm,5.5mm);
+    \node[font=\figtiny\bfseries] at (14mm,3.5mm) {주문하기};
+    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {페이퍼 프로토타입};
+    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Low-fi · 손으로 그린\\화면을 손으로 조작};
+  \end{scope}
+
+  % ---------------- 2. wireframe (no style) ----------------
+  \begin{scope}[shift={(32.5mm,0)}, line width=0.5pt]
+    \draw[ink] (0,0) rectangle (\W,\H);
+    \fill[lite] (0,39mm) rectangle (\W,\H);
+    \node[font=\figtiny] at (14mm,42.5mm) {경험커피};
+    \foreach \x/\t in {2/커피, 10/라떼, 18/차} {
+      \draw[mid] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
+      \node[font=\figtiny, text=mid] at (\x mm+3.75mm,35.75mm) {\t};
+    }
+    \foreach \x/\y/\t in {2/19/아이스 아메리카노, 15/19/카페 라떼, 2/5.5/바닐라 라떼, 15/5.5/녹차 라떼} {
+      \draw[mid] (\x mm,\y mm+5mm) rectangle (\x mm+11mm,\y mm+13mm);
+      \draw[soft] (\x mm,\y mm+5mm) -- (\x mm+11mm,\y mm+13mm) (\x mm,\y mm+13mm) -- (\x mm+11mm,\y mm+5mm);
+      \fill[soft] (\x mm,\y mm+2.6mm) rectangle (\x mm+9mm,\y mm+3.6mm);
+      \fill[lite] (\x mm,\y mm+0.8mm) rectangle (\x mm+5mm,\y mm+1.8mm);
+    }
+    \draw[ink] (2mm,1.5mm) rectangle (26mm,5.5mm);
+    \node[font=\figtiny] at (14mm,3.5mm) {주문하기};
+    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {와이어프레임};
+    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Mid-fi · 스타일 없이\\정보 구조만};
+  \end{scope}
+
+  % ---------------- 3. styled mid-fi ----------------
+  \begin{scope}[shift={(65mm,0)}, line width=0.5pt]
+    \fill[pale, rounded corners=1.5mm] (0,0) rectangle (\W,\H);
+    \draw[ink, rounded corners=1.5mm] (0,0) rectangle (\W,\H);
+    \node[font=\figsmall\bfseries, anchor=west] at (2mm,42.5mm) {경험커피};
+    \node[font=\figtiny, text=mid, anchor=east] at (26mm,42.5mm) {포장 \tikz[baseline=-0.3mm]\fill[mid] (0,0.6mm) -- (1.2mm,0.6mm) -- (0.6mm,-0.2mm) -- cycle;};
+    \foreach \x/\t/\on in {2/커피/1, 10/라떼/0, 18/차/0} {
+      \ifnum\on=1
+        \fill[ink, rounded corners=1.7mm] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
+        \node[font=\figtiny, text=white] at (\x mm+3.75mm,35.75mm) {\t};
+      \else
+        \fill[white, rounded corners=1.7mm] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
+        \node[font=\figtiny, text=mid] at (\x mm+3.75mm,35.75mm) {\t};
+      \fi
+    }
+    \foreach \x/\y/\t/\p/\c in {2/19/아이스 아메리카노/{3,500}/soft, 15/19/카페 라떼/{4,000}/lite, 2/5.5/바닐라 라떼/{4,500}/lite, 15/5.5/녹차 라떼/{4,500}/soft} {
+      \fill[white, rounded corners=1mm] (\x mm-0.6mm,\y mm+0.2mm) rectangle (\x mm+11.6mm,\y mm+13.6mm);
+      \fill[\c, rounded corners=0.8mm] (\x mm,\y mm+5mm) rectangle (\x mm+11mm,\y mm+13mm);
+      \fill[white] (\x mm+3.5mm,\y mm+6.5mm) -- (\x mm+4.3mm,\y mm+11mm) -- (\x mm+6.7mm,\y mm+11mm) -- (\x mm+7.5mm,\y mm+6.5mm) -- cycle;
+      \node[font=\fontsize{4.3}{5}\selectfont, anchor=west, inner sep=0] at (\x mm,\y mm+3.1mm) {\t};
+      \node[font=\fontsize{4.3}{5}\selectfont\bfseries, anchor=west, inner sep=0] at (\x mm,\y mm+1.3mm) {\p원};
+    }
+    \fill[ink, rounded corners=1mm] (2mm,1.5mm) rectangle (26mm,5.5mm);
+    \node[font=\figtiny\bfseries, text=white] at (14mm,3.5mm) {주문하기 · 0원};
+    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {스타일 적용};
+    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Mid-fi · 스타일까지\\검증할 때};
+  \end{scope}
+\end{tikzpicture}
+\end{fig}\end{document}

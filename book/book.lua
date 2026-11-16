@@ -6,6 +6,8 @@
 --   the chapters itself.
 -- * External links become footnotes with the URL (paper is not clickable).
 -- * Links to other chapters / mailto links keep only their text.
+-- * Diagrams referenced as img/<name>.png use img/<name>.pdf instead when it
+--   exists (vector, built by `make figures` from figures/<name>.tex).
 -- * Inline code (used for names like `경험커피`) and emphasis are set in the
 --   sans-serif (gothic) face, because Korean fonts have no italics.
 
@@ -75,9 +77,21 @@ function Emph(el)
   return { pandoc.RawInline("latex", "\\textsf{"), table.unpack(el.content), pandoc.RawInline("latex", "}") }
 end
 
+function Image(el)
+  local base = el.src:match("^(img/.+)%.png$")
+  if base then
+    local f = io.open(base .. ".pdf", "r")
+    if f then
+      f:close()
+      el.src = base .. ".pdf"
+    end
+  end
+  return el
+end
+
 -- Run Meta first so book_title is known when Pandoc runs.
 return {
   { Meta = Meta },
   { Pandoc = Pandoc },
-  { Link = Link, Code = Code, Emph = Emph },
+  { Link = Link, Code = Code, Emph = Emph, Image = Image },
 }
