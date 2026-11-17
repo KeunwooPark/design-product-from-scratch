@@ -4,14 +4,16 @@
 % Matches the RedPrinting SoftCover guide:
 %   front 128x188, back 128x188, spine = \spine mm, bleed 5mm each side
 %   -> page = (128 + spine + 128 + 10) x 198 mm
+% The panel size can be overridden like the spine (`\def\trimW{148}
+% \def\trimH{210}` for the A5 edition, see `make cover-a5`).
 %
 % Build with the Makefile: `make cover SPINE=1.36` (`make guides` adds
 % cut/spine/safe-area lines to check placement against the template).
 \providecommand\spine{7.85}
 
 \documentclass{article}
-\newcommand\trimW{128}   % mm, one panel
-\newcommand\trimH{188}
+\providecommand\trimW{128}   % mm, one panel
+\providecommand\trimH{188}
 \newcommand\bleed{5}
 \newcommand\safe{8}      % keep text at least this far inside the cut line
 
@@ -81,7 +83,7 @@
 
     % design -> build -> evaluate cycle (same as figures/design-cycle.tex),
     % centred across the panel and in the space between title and author
-    \begin{scope}[shift={(\trimW/2,64.5)}, line width=0.9pt, draw=ink,
+    \begin{scope}[shift={(\trimW/2,\trimH/2-29.5)}, line width=0.9pt, draw=ink,
                   every node/.style={text=ink}]
       \def\R{26}
       \foreach \a/\t in {90/디자인, -30/구현, 210/평가}
@@ -101,7 +103,7 @@
 
   % ---- back cover -------------------------------------------------------
   \begin{scope}[shift={(\bleed,\bleed)}]
-    \node[anchor=north west, text width=96mm, align=justify, inner sep=0,
+    \node[anchor=north west, text width=\fpeval{\trimW-32}mm, align=justify, inner sep=0,
           text=ink, font=\fontsize{8.5}{14.5}\selectfont]
       at (16, \trimH-28) {%
         이 소책자는 사용자 중심으로 제품을 디자인하는 방법을 설명한다.
