@@ -10,7 +10,8 @@
 # template for the final page count, e.g. `make cover SPINE=3.2`.
 
 SPINE ?= 5.76
-CHAPTERS := README.md $(sort $(wildcard chapter*.md))
+# sort -V so that chapter10.md comes after chapter9.md, not after chapter1.md
+CHAPTERS := README.md $(shell ls chapter*.md | sort -V)
 BUILD := build
 FIGURE_SRC := $(filter-out figures/_preamble.tex,$(wildcard figures/*.tex))
 FIGURES := $(patsubst figures/%.tex,img/%.pdf,$(FIGURE_SRC))
