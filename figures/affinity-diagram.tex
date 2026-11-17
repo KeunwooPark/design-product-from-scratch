@@ -30,7 +30,13 @@
          {손님이 나온 음료가 자기 것인지 계속 확인한다}
          {휴대폰을 보다 호명을 놓친 손님이 있다}
 
-  \node[font=\figsmall, text=mid, anchor=south west] at ($(t0.north west)+(0,1mm)$) {주제};
-  \node[font=\figsmall, text=mid, anchor=north west] at ($(g0.south west)+(0,-1mm)$) {포스트잇으로 옮긴 관찰 데이터};
+  % Legend, bottom right: solid box = theme, dashed box = observation data.
+  % Right edge of the legend text lines up with the right edge of the groups.
+  \coordinate (L) at ($(g2.south east)+(-21mm,-3mm)$);
+  \draw[draw=ink, line width=1pt] (L) rectangle ++(6mm,-4mm);
+  \node[font=\figsmall, anchor=west] at ($(L)+(8mm,-2mm)$) {주제};
+  \draw[draw=mid, line width=0.5pt, dash pattern=on 1.2pt off 0.9pt, rounded corners=0.8mm]
+    ($(L)+(0,-6mm)$) rectangle ++(6mm,-4mm);
+  \node[font=\figsmall, anchor=west] at ($(L)+(8mm,-8mm)$) {관찰 데이터};
 \end{tikzpicture}
 \end{fig}\end{document}

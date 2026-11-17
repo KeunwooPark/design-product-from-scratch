@@ -7,7 +7,7 @@
 %
 % Build with the Makefile: `make cover SPINE=1.36` (`make guides` adds
 % cut/spine/safe-area lines to check placement against the template).
-\providecommand\spine{5.76}
+\providecommand\spine{7.85}
 
 \documentclass{article}
 \newcommand\trimW{128}   % mm, one panel
@@ -79,15 +79,19 @@
           font=\sffamily\bfseries\fontsize{25}{34}\selectfont]
       at (14, \trimH-24) {프로덕트를\\처음부터\\디자인하는 방법};
 
-    % small UX-system-sketch motif: 고객 -> 알바 -> 사장
-    \begin{scope}[shift={(14,48)}, line width=0.6pt, draw=ink,
-                  every node/.style={font=\sffamily\fontsize{7.5}{9}\selectfont, text=ink}]
-      \foreach \x/\t in {0/고객, 40/알바, 80/사장}
-        \draw (\x+8,0) circle (8) node {\t};
-      \draw[-{Stealth[length=2mm]}] (17,-2) to[bend right=25] (39,-2);
-      \draw[-{Stealth[length=2mm]}] (57,-2) to[bend right=25] (79,-2);
-      \draw[-{Stealth[length=2mm]}] (79, 2) to[bend right=25] (57, 2);
-      \draw[-{Stealth[length=2mm]}] (39, 2) to[bend right=25] (17, 2);
+    % design -> build -> evaluate cycle (same as figures/design-cycle.tex),
+    % centred across the panel and in the space between title and author
+    \begin{scope}[shift={(\trimW/2,64.5)}, line width=0.9pt, draw=ink,
+                  every node/.style={text=ink}]
+      \def\R{26}
+      \foreach \a/\t in {90/디자인, -30/구현, 210/평가}
+        \draw (\a:\R) circle (10)
+          node[font=\sffamily\bfseries\fontsize{9}{11}\selectfont] {\t};
+      \foreach \s/\e in {64/-4, -56/-124, 184/116}
+        \draw[-{Stealth[length=2.6mm,width=2mm]}]
+          (\s:\R) arc[start angle=\s, end angle=\e, radius=\R];
+      \node[align=center, font=\sffamily\fontsize{7.5}{9.5}\selectfont]
+        at (0,0) {끝없는\\반복};
     \end{scope}
 
     \node[anchor=south west, inner sep=0, text=ink,
@@ -103,10 +107,11 @@
         이 소책자는 사용자 중심으로 제품을 디자인하는 방법을 설명한다.
         상황 파악에서 시작해 니즈 도출, 스케치, 프로토타이핑,
         그리고 디자인 커뮤니케이션과 리포트 작성까지,
-        챕터를 따라가면 제품 하나를 디자인할 수 있도록 구성했다.\par\medskip
+        챕터를 따라가면 제품 하나를 디자인할 수 있도록 구성했다.
+        마지막으로 AI로 인해 변하는 것과 변하지 않는 것을 이야기한다.\par\medskip
         \textsf{\bfseries 이런 분들에게}\par\smallskip
         · UX 디자이너로 일을 하고 싶은 학생 또는 디자이너\par
-        · 구현 뿐만 아니라 서비스 설계까지 하고 싶은 개발자\par
+        · 구현뿐만 아니라 서비스 설계까지 하고 싶은 개발자\par
         · 사용자 중심으로 제품을 만들고 싶은 모든 사람};
     \node[anchor=south west, inner sep=0, text=ink2,
           font=\sffamily\fontsize{7.5}{9}\selectfont]
