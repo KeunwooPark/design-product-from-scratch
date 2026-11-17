@@ -7,17 +7,22 @@
 -- * External links become footnotes with the URL (paper is not clickable).
 -- * Links to other chapters / mailto links keep only their text.
 -- * Diagrams referenced as img/<name>.png use img/<name>.pdf instead when it
---   exists (vector, built by `make figures` from figures/<name>.tex).
+--   exists (vector, built by `make figures` from figures/<name>.tex), scaled
+--   by the optional `figure-scale` metadata.
 -- * Inline code (used for names like `경험커피`) and emphasis are set in the
 --   sans-serif (gothic) face, because Korean fonts have no italics.
 
 local stringify = pandoc.utils.stringify
 
 local book_title = nil
+local figure_scale = nil -- optional `figure-scale` metadata (e.g. the B5 edition)
 local dropping = false -- true while inside the README "목차" section
 
 function Meta(meta)
   book_title = stringify(meta.title or "")
+  if meta["figure-scale"] then
+    figure_scale = tonumber(stringify(meta["figure-scale"]))
+  end
 end
 
 local function strip_chapter_prefix(inlines)
@@ -84,6 +89,13 @@ function Image(el)
     if f then
       f:close()
       el.src = base .. ".pdf"
+      -- Diagrams are drawn at 1:1 for the 95mm text width; a larger edition
+      -- can scale them with its body text (\pandocbounded still shrinks a
+      -- figure that would be wider than the text block).
+      if figure_scale and figure_scale ~= 1 then
+        return pandoc.RawInline("latex", string.format(
+          "\\pandocbounded{\\includegraphics[scale=%.3f]{%s}}", figure_scale, el.src))
+      end
     end
   end
   return el

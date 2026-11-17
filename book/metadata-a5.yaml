@@ -1,0 +1,18 @@
+# A5 edition (148x210mm). Overrides book/metadata.yaml.
+# No bleed: the PDF page itself is an A5 sheet, e.g. for office printing.
+trim-width: 148
+trim-height: 210
+
+bleed: 0
+
+margin-top: 22
+margin-bottom: 20
+margin-inner: 20
+margin-outer: 17
+
+# Slightly larger type for the wider text block (111mm vs 95mm).
+font-size: 10
+line-height: 17.5
+
+# Diagrams are drawn for the 9.5pt edition; scale them with the body text.
+figure-scale: 1.05

@@ -1,5 +1,6 @@
 # Build the print book.
 #   make book    -> build/book.pdf   (interior, trim + bleed per page)
+#   make book-a5 -> build/book-a5.pdf (interior on plain A5 sheets, no bleed)
 #   make cover   -> build/cover.pdf  (back + spine + front, with bleed)
 #   make guides  -> build/cover-guides.pdf (cover with cut/spine lines, for checking)
 #   make pages   -> print the interior page count
@@ -16,11 +17,12 @@ BUILD := build
 FIGURE_SRC := $(filter-out figures/_preamble.tex,$(wildcard figures/*.tex))
 FIGURES := $(patsubst figures/%.tex,img/%.pdf,$(FIGURE_SRC))
 
-.PHONY: all book cover guides pages figures clean
+.PHONY: all book book-a5 cover guides pages figures clean
 
 all: book cover
 
 book: $(BUILD)/book.pdf
+book-a5: $(BUILD)/book-a5.pdf
 cover: $(BUILD)/cover.pdf
 guides: $(BUILD)/cover-guides.pdf
 figures: $(FIGURES)
@@ -46,6 +48,22 @@ $(BUILD)/book.pdf: $(BUILD)/book.tex img/*
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
 	@$(MAKE) --no-print-directory pages
+
+# A5 edition: same chapters, book/metadata-a5.yaml overrides size and type.
+$(BUILD)/book-a5.tex: $(CHAPTERS) book/book.tex book/book.lua book/metadata.yaml book/metadata-a5.yaml $(FIGURES) | $(BUILD)
+	pandoc $(CHAPTERS) \
+	  --from markdown \
+	  --metadata-file book/metadata.yaml \
+	  --metadata-file book/metadata-a5.yaml \
+	  --lua-filter book/book.lua \
+	  --template book/book.tex \
+	  --top-level-division=chapter \
+	  -o $@
+
+$(BUILD)/book-a5.pdf: $(BUILD)/book-a5.tex img/*
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
+	@pdfinfo $@ | grep -E '^(Pages|Page size)'
 
 $(BUILD)/cover.pdf: book/cover.tex Makefile | $(BUILD)
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
