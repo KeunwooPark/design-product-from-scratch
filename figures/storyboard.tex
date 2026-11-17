@@ -1,0 +1,91 @@
+% Chapter 3: storyboard of the 경험커피 mobile (QR) ordering experience.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    hand/.style={decorate, decoration={random steps, segment length=1.8mm, amplitude=0.2mm}, line width=0.7pt, draw=ink, line cap=round, line join=round},
+    hthin/.style={hand, line width=0.5pt},
+    capt/.style={font=\figsmall, anchor=north, align=center, text width=21mm},
+  ]
+  \pgfmathsetseed{7}
+  \def\W{22mm}\def\H{22mm}
+  % stick figure: #1 x, #2 y (feet), standing
+  \def\person#1#2{%
+    \draw[line width=0.7pt, fill=white] (#1,#2+8.2mm) circle (1.5mm);
+    \draw[hand] (#1,#2+6.7mm) -- (#1,#2+3mm);
+    \draw[hand] (#1,#2+3mm) -- (#1-1.3mm,#2) (#1,#2+3mm) -- (#1+1.3mm,#2);
+  }
+  % small phone: #1 x, #2 y (center)
+  \def\phone#1#2{\draw[hthin, fill=white] (#1-0.9mm,#2-1.5mm) rectangle (#1+0.9mm,#2+1.5mm);}
+
+  % ---------- 1. scan the QR code at the entrance ----------
+  \begin{scope}[shift={(0,0)}]
+    \draw[hand] (0,0) rectangle (\W,\H);
+    \node[font=\figtiny\bfseries, anchor=north west, inner sep=1mm] at (0,\H) {1};
+    \draw[hthin] (0,2mm) -- (\W,2mm);
+    % door
+    \draw[hand] (12mm,2mm) rectangle (20mm,18mm);
+    \node[font=\figtiny] at (16mm,16mm) {경험커피};
+    % QR sign on the door
+    \draw[hthin, fill=white] (14mm,7.5mm) rectangle (18mm,11.5mm);
+    \foreach \x/\y in {14.5/10, 16.6/10, 14.5/8, 16/9, 17/8.2} \fill[ink] (\x mm,\y mm) rectangle (\x mm+0.8mm,\y mm+0.8mm);
+    \node[font=\fontsize{4.3}{5}\selectfont] at (16mm,13.2mm) {QR 주문};
+    \person{6mm}{2mm}
+    \draw[hand] (6mm,7.2mm) -- (8.6mm,8.2mm);
+    \phone{9.4mm}{8.6mm}
+    \draw[hthin, dashed] (10.5mm,8.9mm) -- (13.6mm,9.4mm);
+    \node[capt] at (11mm,-1.5mm) {카페 입구에서 QR 코드를 찍는다};
+  \end{scope}
+
+  % ---------- 2. order and pay on the phone ----------
+  \begin{scope}[shift={(24.3mm,0)}]
+    \draw[hand] (0,0) rectangle (\W,\H);
+    \node[font=\figtiny\bfseries, anchor=north west, inner sep=1mm] at (0,\H) {2};
+    \draw[hand, fill=white] (6mm,2mm) rectangle (16mm,20mm);
+    \node[font=\fontsize{4.3}{5}\selectfont\bfseries] at (11mm,18.2mm) {메뉴};
+    \foreach \y/\t in {15/아메리카노, 12/카페 라떼, 9/녹차 라떼} {
+      \draw[hthin] (7mm,\y mm-1mm) rectangle (15mm,\y mm+1.2mm);
+      \node[font=\fontsize{4}{5}\selectfont] at (11mm,\y mm+0.1mm) {\t};
+    }
+    \draw[hthin, fill=lite] (7mm,3.2mm) rectangle (15mm,6.2mm);
+    \node[font=\fontsize{4.3}{5}\selectfont\bfseries] at (11mm,4.7mm) {결제하기};
+    % finger
+    \draw[hand] (19.5mm,1mm) -- (16.2mm,4.2mm);
+    \node[capt] at (11mm,-1.5mm) {휴대폰으로 주문하고 결제한다};
+  \end{scope}
+
+  % ---------- 3. wait at a seat inside ----------
+  \begin{scope}[shift={(48.6mm,0)}]
+    \draw[hand] (0,0) rectangle (\W,\H);
+    \node[font=\figtiny\bfseries, anchor=north west, inner sep=1mm] at (0,\H) {3};
+    \draw[hthin] (0,2mm) -- (\W,2mm);
+    % empty entrance on the left
+    \draw[hand] (1.5mm,2mm) -- (1.5mm,16mm) -- (7mm,16mm) -- (7mm,2mm);
+    \node[font=\fontsize{4.3}{5}\selectfont, text=mid] at (4.25mm,17.6mm) {빈 입구};
+    % table and seated person
+    \draw[hand] (11.5mm,6.5mm) -- (17.5mm,6.5mm) (14.5mm,6.5mm) -- (14.5mm,2mm);
+    \draw[line width=0.7pt, fill=white] (19.5mm,11.2mm) circle (1.5mm);
+    \draw[hand] (19.5mm,9.7mm) -- (19.5mm,5.5mm) -- (17.5mm,5.5mm) -- (17.5mm,2mm);
+    \draw[hand] (19.5mm,8.4mm) -- (17.2mm,7.6mm);
+    \phone{16.3mm}{8.2mm}
+    \node[capt] at (11mm,-1.5mm) {입구가 아닌 안쪽 자리에서 기다린다};
+  \end{scope}
+
+  % ---------- 4. get notified and pick up ----------
+  \begin{scope}[shift={(72.9mm,0)}]
+    \draw[hand] (0,0) rectangle (\W,\H);
+    \node[font=\figtiny\bfseries, anchor=north west, inner sep=1mm] at (0,\H) {4};
+    \draw[hthin] (0,2mm) -- (\W,2mm);
+    % counter with a cup
+    \draw[hand] (12mm,2mm) rectangle (21mm,8mm);
+    \node[font=\fontsize{4.3}{5}\selectfont] at (16.5mm,5mm) {픽업대};
+    \draw[hand, fill=white] (14.2mm,8mm) -- (14.8mm,11.5mm) -- (17.2mm,11.5mm) -- (17.8mm,8mm) -- cycle;
+    \person{7mm}{2mm}
+    \draw[hand] (7mm,7.2mm) -- (10.5mm,9.5mm);
+    % notification bubble
+    \draw[hthin, fill=white] (5.5mm,14mm) rectangle (20mm,19mm);
+    \node[font=\fontsize{4.3}{5}\selectfont] at (12.75mm,16.5mm) {음료가 나왔어요};
+    \draw[hthin] (8mm,14mm) -- (8mm,12.3mm) -- (10mm,14mm);
+    \node[capt] at (11mm,-1.5mm) {알림을 받고 음료를 받아 간다};
+  \end{scope}
+\end{tikzpicture}
+\end{fig}\end{document}
