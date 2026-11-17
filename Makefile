@@ -9,7 +9,7 @@
 # It depends on the page count and paper; update it after re-downloading the
 # template for the final page count, e.g. `make cover SPINE=3.2`.
 
-SPINE ?= 5.76
+SPINE ?= 7.85
 # sort -V so that chapter10.md comes after chapter9.md, not after chapter1.md
 CHAPTERS := README.md $(shell ls chapter*.md | sort -V)
 BUILD := build

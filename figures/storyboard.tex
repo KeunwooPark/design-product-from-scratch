@@ -29,6 +29,9 @@
     \draw[hthin, fill=white] (14mm,7.5mm) rectangle (18mm,11.5mm);
     \foreach \x/\y in {14.5/10, 16.6/10, 14.5/8, 16/9, 17/8.2} \fill[ink] (\x mm,\y mm) rectangle (\x mm+0.8mm,\y mm+0.8mm);
     \node[font=\fontsize{4.3}{5}\selectfont] at (16mm,13.2mm) {QR 주문};
+    % sign under the QR code: after paying, wait inside (cut 3)
+    \node[font=\fontsize{4.3}{5}\selectfont] at (16mm,6.1mm) {안쪽 대기};
+    \draw[hthin, -{Stealth[length=1.2mm,width=1mm]}] (13.6mm,4.2mm) -- (18.6mm,4.2mm);
     \person{6mm}{2mm}
     \draw[hand] (6mm,7.2mm) -- (8.6mm,8.2mm);
     \phone{9.4mm}{8.6mm}
