@@ -25,12 +25,12 @@
   \node[good] (h3) at (58mm, 0mm) {};
   \foreach \a/\b in {g1/h1, g2/h2, g3/h2, h1/h3, h2/h3} \draw[mid, line width=0.4pt] (\a) -- (\b);
 
-  \node[endpt, anchor=east] at ($(L)+(-1.5mm,0)$) {문제\\(HMW)};
-  \node[endpt, anchor=west] at ($(R)+(1.5mm,0)$) {솔루션};
+  \node[endpt, anchor=east] at ($(L)+(-1.5mm,0)$) {\tr{문제\\(HMW)}{Problem\\(HMW)}};
+  \node[endpt, anchor=west] at ($(R)+(1.5mm,0)$) {\tr{솔루션}{Solution}};
 
-  \node[font=\figtext\bfseries, anchor=south] at (18mm,20.5mm) {발산};
-  \node[font=\figsmall, text=mid, anchor=south] at (18mm,16.5mm) {다양한 아이디어 쏟아내기};
-  \node[font=\figtext\bfseries, anchor=south] at (54mm,20.5mm) {수렴};
-  \node[font=\figsmall, text=mid, anchor=south] at (54mm,16.5mm) {좋은 아이디어 추려내기};
+  \node[font=\figtext\bfseries, anchor=south] at (18mm,20.5mm) {\tr{발산}{Diverge}};
+  \node[font=\figsmall, text=mid, anchor=south] at (18mm,16.5mm) {\tr{다양한 아이디어 쏟아내기}{pour out many ideas}};
+  \node[font=\figtext\bfseries, anchor=south] at (54mm,20.5mm) {\tr{수렴}{Converge}};
+  \node[font=\figsmall, text=mid, anchor=south] at (54mm,16.5mm) {\tr{좋은 아이디어 추려내기}{pick out the good ones}};
 \end{tikzpicture}
 \end{fig}\end{document}

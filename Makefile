@@ -6,7 +6,8 @@
 #   make guides  -> build/cover-guides.pdf (cover with cut/spine lines, for checking)
 #   make cover-a5 -> build/cover-a5.pdf + build/cover-a5-guides.pdf (A5 edition)
 #   make pages   -> print the interior page count
-#   make figures -> img/<name>.pdf (print) + img/<name>.png (Markdown) from figures/<name>.tex
+#   make figures -> img/<l>/<name>.pdf (print) + img/<l>/<name>.png (Markdown)
+#                   from figures/<name>.tex, for every language <l> in FIGURE_LANGS
 #
 # SPINE is the spine (세네카) width in mm from the printer's cover template.
 # It depends on the page count and paper; update it after re-downloading the
@@ -25,7 +26,12 @@ CHAPTERS := $(lang)/README.md $(shell ls $(lang)/chapter*.md | sort -V)
 BUILD := build
 OUT := $(if $(filter ko,$(lang)),$(BUILD),$(BUILD)/$(lang))
 FIGURE_SRC := $(filter-out figures/_preamble.tex,$(wildcard figures/*.tex))
-FIGURES := $(patsubst figures/%.tex,img/%.pdf,$(FIGURE_SRC))
+FIGURE_NAMES := $(patsubst figures/%.tex,%,$(FIGURE_SRC))
+# Languages the diagrams are built in (\tr{한국어}{English} in figures/*.tex).
+FIGURE_LANGS := ko en
+# The book needs only its own language's diagrams; `make figures` builds all.
+FIGURES := $(patsubst %,img/$(lang)/%.pdf,$(FIGURE_NAMES))
+ALL_FIGURES := $(foreach l,$(FIGURE_LANGS),$(patsubst %,img/$(l)/%.pdf,$(FIGURE_NAMES)))
 
 .PHONY: all book book-a5 cover cover-a5 guides pages figures clean
 
@@ -36,15 +42,20 @@ book-a5: $(OUT)/book-a5.pdf
 cover: $(BUILD)/cover.pdf
 guides: $(BUILD)/cover-guides.pdf
 cover-a5: $(BUILD)/cover-a5.pdf $(BUILD)/cover-a5-guides.pdf
-figures: $(FIGURES)
+figures: $(ALL_FIGURES)
 
 # Diagrams: vector PDF for the print book, 300dpi PNG for the Markdown.
 # Both are committed so GitHub shows the PNGs without building anything.
-img/%.pdf: figures/%.tex figures/_preamble.tex | $(BUILD)
-	@mkdir -p $(BUILD)/figures img
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD)/figures $< >/dev/null
-	cp $(BUILD)/figures/$*.pdf $@
-	pdftocairo -png -r 300 -singlefile $@ img/$*
+# One pattern rule per language: img/<l>/%.pdf, with \figlang set to <l>.
+define figure_rule
+img/$(1)/%.pdf: figures/%.tex figures/_preamble.tex | $(BUILD)
+	@mkdir -p $(BUILD)/figures/$(1) img/$(1)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD)/figures/$(1) \
+	  -jobname=$$* "\def\figlang{$(1)}\input{$$<}" >/dev/null
+	cp $(BUILD)/figures/$(1)/$$*.pdf $$@
+	pdftocairo -png -r 300 -singlefile $$@ img/$(1)/$$*
+endef
+$(foreach l,$(FIGURE_LANGS),$(eval $(call figure_rule,$(l))))
 
 $(OUT)/book.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml $(lang)/metadata.yaml $(FIGURES) | $(OUT)
 	pandoc $(CHAPTERS) \
@@ -56,7 +67,7 @@ $(OUT)/book.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml $(lang
 	  --top-level-division=chapter \
 	  -o $@
 
-$(OUT)/book.pdf: $(OUT)/book.tex img/*
+$(OUT)/book.pdf: $(OUT)/book.tex $(FIGURES) $(wildcard img/shared/*)
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	@$(MAKE) --no-print-directory pages
@@ -73,7 +84,7 @@ $(OUT)/book-a5.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml boo
 	  --top-level-division=chapter \
 	  -o $@
 
-$(OUT)/book-a5.pdf: $(OUT)/book-a5.tex img/*
+$(OUT)/book-a5.pdf: $(OUT)/book-a5.tex $(FIGURES) $(wildcard img/shared/*)
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	@pdfinfo $@ | grep -E '^(Pages|Page size)'

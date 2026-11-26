@@ -1,16 +1,35 @@
 % Shared preamble for the book's diagrams.
 %
-% Each figures/<name>.tex is a standalone TikZ picture. `make figures` builds
-%   img/<name>.pdf  vector, used by the print book (book/book.lua swaps it in)
-%   img/<name>.png  300dpi, white background, used by the Markdown on GitHub
+% Each figures/<name>.tex is a standalone TikZ picture. `make figures` builds,
+% for each language <lang> (ko, en),
+%   img/<lang>/<name>.pdf  vector, used by the print book (book.lua swaps it in)
+%   img/<lang>/<name>.png  300dpi, white background, used by the Markdown
+%
+% Text is written once per language as \tr{한국어}{English}. The language is
+% chosen by defining \figlang before this file is read, e.g.
+%   xelatex -jobname=<name> "\def\figlang{en}\input{figures/<name>}"
+% and defaults to ko.
 %
 % Figures are drawn to fit the print text block (95mm wide) at 1:1 scale, in
 % grayscale only so they survive black-and-white printing.
 \documentclass{article}
+\providecommand\figlang{ko}
+\def\figlangKo{ko}
+\ifx\figlang\figlangKo
+  \newcommand\tr[2]{#1}
+\else
+  \newcommand\tr[2]{#2}
+\fi
 \usepackage{fontspec}
-\usepackage[hangul]{xetexko}
-\setmainfont{Noto Sans CJK KR}
-\setmainhangulfont{Noto Sans CJK KR}
+\ifx\figlang\figlangKo
+  \usepackage[hangul]{xetexko}
+  \setmainfont{Noto Sans CJK KR}
+  \setmainhangulfont{Noto Sans CJK KR}
+\else
+  \setmainfont{Noto Sans}
+  % No hyphenation: diagram labels read better with whole words.
+  \AtBeginDocument{\hyphenpenalty=10000 \exhyphenpenalty=10000 }
+\fi
 \usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc,fit,decorations.pathmorphing,decorations.pathreplacing,shapes.geometric,backgrounds}
@@ -35,7 +54,9 @@
 \pagestyle{empty}
 % Break Korean lines only at spaces (between words), not between syllables,
 % which reads better in narrow diagram boxes.
-\AtBeginDocument{\XeTeXlinebreakpenalty=10000 }
+\ifx\figlang\figlangKo
+  \AtBeginDocument{\XeTeXlinebreakpenalty=10000 }
+\fi
 
 % Crop each page to its picture (+1mm border); TeX Live here has no
 % standalone/preview packages. Wrap the tikzpicture in \begin{fig}...\end{fig}.

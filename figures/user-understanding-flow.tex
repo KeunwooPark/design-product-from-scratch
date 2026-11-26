@@ -2,30 +2,30 @@
 \input{figures/_preamble}
 \begin{document}\begin{fig}
 \begin{tikzpicture}[
-    stepbox/.style={draw=ink, line width=0.7pt, fill=lite, minimum width=21mm, minimum height=9mm, font=\figtext\bfseries, align=center},
+    stepbox/.style={draw=ink, line width=0.7pt, fill=lite, minimum width=\tr{21mm}{24mm}, minimum height=9mm, font=\figtext\bfseries, align=center},
     outbox/.style={stepbox, fill=white, line width=1.1pt},
-    ex/.style={font=\figsmall, text width=50mm, align=left, anchor=west},
+    ex/.style={font=\figsmall, text width=\tr{50mm}{45mm}, align=left, anchor=west},
     brace/.style={decorate, decoration={brace, amplitude=1.6mm, mirror}, draw=mid, line width=0.6pt},
   ]
   \def\gap{13mm}
-  \node[stepbox] (s1) at (0,0)        {목적 설정};
-  \node[stepbox] (s2) at (0,-\gap)    {데이터 수집};
-  \node[stepbox] (s3) at (0,-2*\gap)  {분석};
-  \node[outbox]  (s4) at (0,-3*\gap)  {인사이트};
-  \node[outbox]  (s5) at (0,-4*\gap)  {니즈 (HMW)};
+  \node[stepbox] (s1) at (0,0)        {\tr{목적 설정}{Set purpose}};
+  \node[stepbox] (s2) at (0,-\gap)    {\tr{데이터 수집}{Collect data}};
+  \node[stepbox] (s3) at (0,-2*\gap)  {\tr{분석}{Analyze}};
+  \node[outbox]  (s4) at (0,-3*\gap)  {\tr{인사이트}{Insights}};
+  \node[outbox]  (s5) at (0,-4*\gap)  {\tr{니즈}{Needs} (HMW)};
   \foreach \a/\b in {s1/s2, s2/s3, s3/s4, s4/s5} \draw[arr] (\a) -- (\b);
 
-  \node[ex] at ($(s1.east)+(4mm,0)$) {평일 점심시간에 대기 시간이 길어지는 이유 파악};
-  \node[ex] at ($(s2.east)+(4mm,0)$) {점심시간에 매장 안에서 벌어지는 일을 관찰};
-  \node[ex] at ($(s3.east)+(4mm,0)$) {관찰 기록을 포스트잇으로 옮겨 친화도 다이어그램으로 묶기};
-  \node[ex] at ($(s4.east)+(4mm,0)$) {주문하는 곳과 음료 받는 곳이 붙어 있어 대기 고객이 입장 동선을 막는다};
-  \node[ex] at ($(s5.east)+(4mm,0)$) {어떻게 하면 주문을 카페 안쪽에서 할 수 있을까?};
-  \node[font=\figsmall\bfseries, text=mid, anchor=south west] at ($(s1.north east)+(4mm,1.5mm)$) {경험커피의 예};
+  \node[ex] at ($(s1.east)+(4mm,0)$) {\tr{평일 점심시간에 대기 시간이 길어지는 이유 파악}{Find out why waits get long at weekday lunchtime}};
+  \node[ex] at ($(s2.east)+(4mm,0)$) {\tr{점심시간에 매장 안에서 벌어지는 일을 관찰}{Observe what happens in the café at lunchtime}};
+  \node[ex] at ($(s3.east)+(4mm,0)$) {\tr{관찰 기록을 포스트잇으로 옮겨 친화도 다이어그램으로 묶기}{Copy the observations onto sticky notes and group them into an affinity diagram}};
+  \node[ex] at ($(s4.east)+(4mm,0)$) {\tr{주문하는 곳과 음료 받는 곳이 붙어 있어 대기 고객이 입장 동선을 막는다}{The order and pickup counters are side by side, so waiting customers block people coming in}};
+  \node[ex] at ($(s5.east)+(4mm,0)$) {\tr{어떻게 하면 주문을 카페 안쪽에서 할 수 있을까?}{How might we take orders further inside the café?}};
+  \node[font=\figsmall\bfseries, text=mid, anchor=south west] at ($(s1.north east)+(4mm,1.5mm)$) {\tr{경험커피의 예}{Experience Coffee example}};
 
   % section brackets on the left
   \draw[brace] ($(s1.north west)+(-2mm,0)$) -- ($(s4.south west)+(-2mm,0)$)
-    node[midway, left=2.5mm, font=\figsmall, text=mid, align=center] {사용자\\이해하기};
+    node[midway, left=2.5mm, font=\figsmall, text=mid, align=center] {\tr{사용자\\이해하기}{Understand\\users}};
   \draw[brace] ($(s5.north west)+(-2mm,0)$) -- ($(s5.south west)+(-2mm,0)$)
-    node[midway, left=2.5mm, font=\figsmall, text=mid, align=center] {니즈\\도출하기};
+    node[midway, left=2.5mm, font=\figsmall, text=mid, align=center] {\tr{니즈\\도출하기}{Derive\\needs}};
 \end{tikzpicture}
 \end{fig}\end{document}

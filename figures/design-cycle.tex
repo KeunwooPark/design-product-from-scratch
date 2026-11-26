@@ -8,15 +8,15 @@
     cyc/.style={->, draw=ink, line width=0.9pt, >={Stealth[length=2.6mm,width=2mm]}},
   ]
   \def\R{25mm}
-  \node[stage] (d) at (90:\R)  {{\figtext\bfseries 디자인}\\[-0.5mm]{\figtiny\color{mid} 이 소책자의 범위}};
-  \node[stage] (b) at (-30:\R) {{\figtext\bfseries 구현}\\[-0.5mm]{\figtiny\color{mid} 제품으로 만들기}};
-  \node[stage] (e) at (210:\R) {{\figtext\bfseries 평가}\\[-0.5mm]{\figtiny\color{mid} 사용자와 확인하기}};
+  \node[stage] (d) at (90:\R)  {{\figtext\bfseries \tr{디자인}{Design}}\\[-0.5mm]{\figtiny\color{mid} \tr{이 소책자의 범위}{covered here}}};
+  \node[stage] (b) at (-30:\R) {{\figtext\bfseries \tr{구현}{Build}}\\[-0.5mm]{\figtiny\color{mid} \tr{제품으로 만들기}{make it real}}};
+  \node[stage] (e) at (210:\R) {{\figtext\bfseries \tr{평가}{Evaluate}}\\[-0.5mm]{\figtiny\color{mid} \tr{사용자와 확인하기}{check with users}}};
 
   % clockwise arcs on the circle through the three stage centers
   \draw[cyc] (63:\R)  arc[start angle=63,  end angle=-3,   radius=\R];
   \draw[cyc] (-57:\R) arc[start angle=-57, end angle=-123, radius=\R];
   \draw[cyc] (183:\R) arc[start angle=183, end angle=117,  radius=\R];
 
-  \node[font=\figsmall, text=mid, align=center] at (0,0) {끝없이\\반복};
+  \node[font=\figsmall, text=mid, align=center] at (0,0) {\tr{끝없이\\반복}{repeat\\endlessly}};
 \end{tikzpicture}
 \end{fig}\end{document}

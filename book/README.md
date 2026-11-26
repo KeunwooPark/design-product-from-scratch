@@ -8,7 +8,7 @@ make book     # build/book.pdf   interior, 138x198mm pages (128x188 trim + 5mm b
 make cover    # build/cover.pdf  back + spine + front, with 5mm bleed
 make guides   # build/cover-guides.pdf  cover with cut / spine / safe-area lines
 make pages    # print the interior page count
-make figures  # img/<name>.pdf + img/<name>.png from figures/<name>.tex
+make figures  # img/<lang>/<name>.{pdf,png} from figures/<name>.tex, for ko and en
 ```
 
 `make book lang=en` (or `book-a5`, `pages`) builds the interior from `en/`
@@ -26,19 +26,29 @@ and `pdftocairo` (poppler) for the figure PNGs.
 | `book.tex` | interior layout: headings, running heads, TrimBox/BleedBox |
 | `book.lua` | Markdown → print adjustments (links → footnotes, README → preface) |
 | `cover.tex` | cover design and text |
-| `../figures/*.tex` | diagrams (TikZ, grayscale, drawn at the 95mm text width) |
+| `../figures/*.tex` | diagrams (TikZ, grayscale, drawn at the 95mm text width), text in every language |
 | `cover-template.pdf` | printer's (RedPrinting) template, not committed |
 
 ## Figures
 
 Each diagram is a TikZ file in `figures/` sharing `figures/_preamble.tex`.
-`make figures` writes two files per diagram into `img/`, and both are committed:
+Text is written once for every language as `\tr{한국어}{English}`, so the
+drawing itself is shared. Where English needs a different size or position,
+the number is wrapped the same way, e.g. `minimum width=\tr{21mm}{24mm}`.
 
-- `img/<name>.png` (300dpi, white background) is what the Markdown links to
-  (as `../img/<name>.png` from the language folder), so the pages render on
-  GitHub.
-- `img/<name>.pdf` (vector) is what the print book uses: `book.lua` swaps a
-  `.png` link for the `.pdf` next to it.
+`make figures` builds every diagram in each language of `FIGURE_LANGS`
+(Makefile) by defining `\figlang`, and writes two files per diagram into
+`img/<lang>/`. Both are committed:
+
+- `img/<lang>/<name>.png` (300dpi, white background) is what the Markdown
+  links to (as `../img/<lang>/<name>.png`), so the pages render on GitHub.
+- `img/<lang>/<name>.pdf` (vector) is what the print book uses: `book.lua`
+  swaps a `.png` link for the `.pdf` next to it.
+
+Screenshots that are the same in every language live in `img/shared/`.
+
+Korean figures use Noto Sans CJK KR and break lines only between words;
+English figures use Noto Sans with hyphenation turned off.
 
 The Markdown alt text becomes the figure caption in the book.
 

@@ -10,8 +10,9 @@
 |---|---|
 | `ko/` | Korean text: `README.md` (preface), `chapter*.md`, `metadata.yaml` |
 | `book/` | print edition shared by all languages (see [book/README.md](book/README.md)) |
-| `figures/` | TikZ sources of the diagrams |
-| `img/` | images the chapters link to (diagrams built from `figures/`, screenshots) |
+| `figures/` | TikZ sources of the diagrams, with text in every language |
+| `img/<lang>/` | diagrams built from `figures/`, per language |
+| `img/shared/` | screenshots used by every language |
 
 Each language lives in its own folder with the same file names, so chapters
 line up across languages. Build a language's print book with
