@@ -1,6 +1,7 @@
 # Print edition
 
-Builds the print-ready PDFs from the chapter Markdown files in the repo root.
+Builds the print-ready PDFs from the chapter Markdown files in a language
+folder (`ko/` by default).
 
 ```
 make book     # build/book.pdf   interior, 138x198mm pages (128x188 trim + 5mm bleed)
@@ -10,15 +11,20 @@ make pages    # print the interior page count
 make figures  # img/<name>.pdf + img/<name>.png from figures/<name>.tex
 ```
 
+`make book lang=en` (or `book-a5`, `pages`) builds the interior from `en/`
+into `build/en/`. Korean builds into `build/` as before.
+
 Requirements: `pandoc` and TeX Live with XeLaTeX (`xetexko`, `titlesec`,
 `fancyhdr`, `footmisc`, `xurl`, `float`, `enumitem`, `tikz`), Noto CJK KR fonts,
 and `pdftocairo` (poppler) for the figure PNGs.
 
 | File | What it controls |
 |---|---|
-| `metadata.yaml` | title, author, trim size, bleed, margins, fonts, font size |
+| `layout.yaml` | trim size, bleed, margins, font size (all languages) |
+| `layout-a5.yaml` | overrides for the A5 edition |
+| `../<lang>/metadata.yaml` | title, author, fonts, `hangul`, labels (들어가며, 목차, 차례) |
 | `book.tex` | interior layout: headings, running heads, TrimBox/BleedBox |
-| `book.lua` | Markdown → print adjustments (links → footnotes, README → 들어가며) |
+| `book.lua` | Markdown → print adjustments (links → footnotes, README → preface) |
 | `cover.tex` | cover design and text |
 | `../figures/*.tex` | diagrams (TikZ, grayscale, drawn at the 95mm text width) |
 | `cover-template.pdf` | printer's (RedPrinting) template, not committed |
@@ -28,8 +34,9 @@ and `pdftocairo` (poppler) for the figure PNGs.
 Each diagram is a TikZ file in `figures/` sharing `figures/_preamble.tex`.
 `make figures` writes two files per diagram into `img/`, and both are committed:
 
-- `img/<name>.png` (300dpi, white background) is what the Markdown links to,
-  so the pages render on GitHub.
+- `img/<name>.png` (300dpi, white background) is what the Markdown links to
+  (as `../img/<name>.png` from the language folder), so the pages render on
+  GitHub.
 - `img/<name>.pdf` (vector) is what the print book uses: `book.lua` swaps a
   `.png` link for the `.pdf` next to it.
 

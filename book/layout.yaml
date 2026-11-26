@@ -1,6 +1,6 @@
-# Book settings. Sizes are in mm.
-title: 프로덕트를 처음부터 디자인하는 방법
-author: 박근우
+# Print layout shared by every language. Sizes are in mm.
+# Language-specific settings (title, author, fonts, labels) live in
+# <lang>/metadata.yaml.
 
 # Trim (cut) size and bleed. The PDF page = trim + 2 × bleed.
 trim-width: 128
@@ -16,7 +16,3 @@ margin-outer: 15
 # Body font size / line spacing in pt.
 font-size: 9.5
 line-height: 16.5
-
-main-font: Noto Serif CJK KR
-sans-font: Noto Sans CJK KR
-mono-font: Noto Sans Mono CJK KR

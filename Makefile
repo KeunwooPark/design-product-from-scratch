@@ -1,6 +1,7 @@
 # Build the print book.
 #   make book    -> build/book.pdf   (interior, trim + bleed per page)
 #   make book-a5 -> build/book-a5.pdf (interior on plain A5 sheets, no bleed)
+#   make book lang=en -> build/en/book.pdf (any language folder; default ko)
 #   make cover   -> build/cover.pdf  (back + spine + front, with bleed)
 #   make guides  -> build/cover-guides.pdf (cover with cut/spine lines, for checking)
 #   make cover-a5 -> build/cover-a5.pdf + build/cover-a5-guides.pdf (A5 edition)
@@ -16,9 +17,13 @@ SPINE ?= 7.85
 # (7.85mm for 69 pages, scaled to 60 pages); replace it with the 세네카 from
 # the printer's A5 template.
 SPINE_A5 ?= 6.83
+# Language of the interior: the folder holding README.md, chapter*.md and
+# metadata.yaml. Korean builds into build/ as before; others into build/<lang>/.
+lang ?= ko
 # sort -V so that chapter10.md comes after chapter9.md, not after chapter1.md
-CHAPTERS := README.md $(shell ls chapter*.md | sort -V)
+CHAPTERS := $(lang)/README.md $(shell ls $(lang)/chapter*.md | sort -V)
 BUILD := build
+OUT := $(if $(filter ko,$(lang)),$(BUILD),$(BUILD)/$(lang))
 FIGURE_SRC := $(filter-out figures/_preamble.tex,$(wildcard figures/*.tex))
 FIGURES := $(patsubst figures/%.tex,img/%.pdf,$(FIGURE_SRC))
 
@@ -26,8 +31,8 @@ FIGURES := $(patsubst figures/%.tex,img/%.pdf,$(FIGURE_SRC))
 
 all: book cover
 
-book: $(BUILD)/book.pdf
-book-a5: $(BUILD)/book-a5.pdf
+book: $(OUT)/book.pdf
+book-a5: $(OUT)/book-a5.pdf
 cover: $(BUILD)/cover.pdf
 guides: $(BUILD)/cover-guides.pdf
 cover-a5: $(BUILD)/cover-a5.pdf $(BUILD)/cover-a5-guides.pdf
@@ -41,34 +46,36 @@ img/%.pdf: figures/%.tex figures/_preamble.tex | $(BUILD)
 	cp $(BUILD)/figures/$*.pdf $@
 	pdftocairo -png -r 300 -singlefile $@ img/$*
 
-$(BUILD)/book.tex: $(CHAPTERS) book/book.tex book/book.lua book/metadata.yaml $(FIGURES) | $(BUILD)
+$(OUT)/book.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml $(lang)/metadata.yaml $(FIGURES) | $(OUT)
 	pandoc $(CHAPTERS) \
 	  --from markdown \
-	  --metadata-file book/metadata.yaml \
+	  --metadata-file book/layout.yaml \
+	  --metadata-file $(lang)/metadata.yaml \
 	  --lua-filter book/book.lua \
 	  --template book/book.tex \
 	  --top-level-division=chapter \
 	  -o $@
 
-$(BUILD)/book.pdf: $(BUILD)/book.tex img/*
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
+$(OUT)/book.pdf: $(OUT)/book.tex img/*
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	@$(MAKE) --no-print-directory pages
 
-# A5 edition: same chapters, book/metadata-a5.yaml overrides size and type.
-$(BUILD)/book-a5.tex: $(CHAPTERS) book/book.tex book/book.lua book/metadata.yaml book/metadata-a5.yaml $(FIGURES) | $(BUILD)
+# A5 edition: same chapters, book/layout-a5.yaml overrides size and type.
+$(OUT)/book-a5.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml book/layout-a5.yaml $(lang)/metadata.yaml $(FIGURES) | $(OUT)
 	pandoc $(CHAPTERS) \
 	  --from markdown \
-	  --metadata-file book/metadata.yaml \
-	  --metadata-file book/metadata-a5.yaml \
+	  --metadata-file book/layout.yaml \
+	  --metadata-file book/layout-a5.yaml \
+	  --metadata-file $(lang)/metadata.yaml \
 	  --lua-filter book/book.lua \
 	  --template book/book.tex \
 	  --top-level-division=chapter \
 	  -o $@
 
-$(BUILD)/book-a5.pdf: $(BUILD)/book-a5.tex img/*
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) $< >/dev/null
+$(OUT)/book-a5.pdf: $(OUT)/book-a5.tex img/*
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	@pdfinfo $@ | grep -E '^(Pages|Page size)'
 
 $(BUILD)/cover.pdf: book/cover.tex Makefile | $(BUILD)
@@ -98,10 +105,10 @@ $(BUILD)/cover-a5-guides.pdf: book/cover.tex Makefile | $(BUILD)
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
 	  -jobname=cover-a5-guides "$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
 
-pages: $(BUILD)/book.pdf
+pages: $(OUT)/book.pdf
 	@pdfinfo $< | grep -E '^(Pages|Page size)'
 
-$(BUILD):
+$(BUILD) $(BUILD)/$(lang):
 	mkdir -p $@
 
 clean:
