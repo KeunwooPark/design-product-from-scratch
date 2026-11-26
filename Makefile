@@ -8,6 +8,8 @@
 #   make cover-split -> build/cover-split.pdf + build/cover-split-guides.pdf
 #                    (no spine: page 1 = front, page 2 = back, with bleed)
 #   make cover-a5-split -> build/cover-a5-split.pdf + build/cover-a5-split-guides.pdf
+#   make pdf     -> pdf/design-product-from-scratch-<lang>.pdf, the reading PDF
+#                   for the website: A5 interior with the covers, committed
 #   make pages   -> print the interior page count
 #   make figures -> img/<l>/<name>.pdf (print) + img/<l>/<name>.png (Markdown)
 #                   from figures/<name>.tex, for every language <l> in FIGURE_LANGS
@@ -28,6 +30,8 @@ lang ?= ko
 CHAPTERS := $(lang)/README.md $(shell ls $(lang)/chapter*.md | sort -V)
 BUILD := build
 OUT := $(if $(filter ko,$(lang)),$(BUILD),$(BUILD)/$(lang))
+# The reading PDF, committed so the website (and GitHub) can serve it.
+PDF := pdf/design-product-from-scratch-$(lang).pdf
 FIGURE_SRC := $(filter-out figures/_preamble.tex,$(wildcard figures/*.tex))
 FIGURE_NAMES := $(patsubst figures/%.tex,%,$(FIGURE_SRC))
 # Languages the diagrams are built in (\tr{한국어}{English} in figures/*.tex).
@@ -36,7 +40,7 @@ FIGURE_LANGS := ko en
 FIGURES := $(patsubst %,img/$(lang)/%.pdf,$(FIGURE_NAMES))
 ALL_FIGURES := $(foreach l,$(FIGURE_LANGS),$(patsubst %,img/$(l)/%.pdf,$(FIGURE_NAMES)))
 
-.PHONY: all book book-a5 cover cover-a5 cover-split cover-a5-split guides pages figures clean
+.PHONY: all book book-a5 cover cover-a5 cover-split cover-a5-split guides pages figures pdf clean
 
 all: book cover
 
@@ -48,6 +52,7 @@ cover-a5: $(BUILD)/cover-a5.pdf $(BUILD)/cover-a5-guides.pdf
 cover-split: $(BUILD)/cover-split.pdf $(BUILD)/cover-split-guides.pdf
 cover-a5-split: $(BUILD)/cover-a5-split.pdf $(BUILD)/cover-a5-split-guides.pdf
 figures: $(ALL_FIGURES)
+pdf: $(PDF)
 
 # Diagrams: vector PDF for the print book, 300dpi PNG for the Markdown.
 # Both are committed so GitHub shows the PNGs without building anything.
@@ -144,6 +149,36 @@ $(BUILD)/cover-a5-split-guides.pdf: book/cover.tex Makefile | $(BUILD)
 	  -jobname=cover-a5-split-guides "$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
 	  -jobname=cover-a5-split-guides "$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+
+# Reading PDF: the A5 interior with the A5 covers (split, no bleed) as its
+# first and last pages. book.tex places them when `cover` is set.
+EBOOK_COVER = $(A5COVER)\def\bleed{0}\def\split{}
+$(OUT)/ebook-cover.pdf: book/cover.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=ebook-cover "$(EBOOK_COVER)\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=ebook-cover "$(EBOOK_COVER)\input{book/cover.tex}" >/dev/null
+
+$(OUT)/ebook.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml book/layout-a5.yaml $(lang)/metadata.yaml $(FIGURES) | $(OUT)
+	pandoc $(CHAPTERS) \
+	  --from markdown \
+	  --metadata-file book/layout.yaml \
+	  --metadata-file book/layout-a5.yaml \
+	  --metadata-file $(lang)/metadata.yaml \
+	  --metadata cover=$(OUT)/ebook-cover.pdf \
+	  --lua-filter book/book.lua \
+	  --template book/book.tex \
+	  --top-level-division=chapter \
+	  -o $@
+
+$(OUT)/ebook.pdf: $(OUT)/ebook.tex $(OUT)/ebook-cover.pdf $(FIGURES) $(wildcard img/shared/*)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
+
+$(PDF): $(OUT)/ebook.pdf
+	@mkdir -p $(dir $@)
+	cp $< $@
+	@pdfinfo $@ | grep -E '^(Pages|Page size|File size)'
 
 pages: $(OUT)/book.pdf
 	@pdfinfo $< | grep -E '^(Pages|Page size)'

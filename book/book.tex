@@ -121,6 +121,19 @@ $endif$
 
 \begin{document}
 
+$if(cover)$
+% ---- covers (reading PDF, `make pdf`) -------------------------------------
+% `cover` is a PDF with the front cover on page 1 and the back on page 2, at
+% the same size as this page. Each is drawn behind an otherwise empty page.
+\newcommand\coverpage[1]{%
+  \thispagestyle{empty}%
+  \AddToHookNext{shipout/background}{\put(0pt,-\paperheight){%
+    \includegraphics[page=#1,width=\paperwidth,height=\paperheight]{$cover$}}}%
+  \null\clearpage}
+\pagenumbering{Alph}  % distinct page labels, so they don't clash with i, 1, ...
+\coverpage{1}
+\thispagestyle{empty}\null\clearpage  % inside of the front cover
+$endif$
 \frontmatter
 % ---- title page ----------------------------------------------------------
 \begin{titlepage}
@@ -137,5 +150,13 @@ $endif$
 
 \mainmatter
 $body$
+$if(cover)$
+
+% Back cover on a left-hand (even) page, so spreads stay as in print: add a
+% blank inside back cover when the text ends on a left-hand page.
+\clearpage
+\ifodd\ReadonlyShipoutCounter\else\thispagestyle{empty}\null\clearpage\fi
+\coverpage{2}
+$endif$
 
 \end{document}
