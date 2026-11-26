@@ -3,6 +3,8 @@
 #   make book-a5 -> build/book-a5.pdf (interior on plain A5 sheets, no bleed)
 #   make book lang=en -> build/en/book.pdf (any language folder; default ko)
 #   make cover   -> build/cover.pdf  (back + spine + front, with bleed)
+#                   covers take lang= too: text from <lang>/cover-text.tex,
+#                   output in build/<lang>/ for languages other than ko
 #   make guides  -> build/cover-guides.pdf (cover with cut/spine lines, for checking)
 #   make cover-a5 -> build/cover-a5.pdf + build/cover-a5-guides.pdf (A5 edition)
 #   make cover-split -> build/cover-split.pdf + build/cover-split-guides.pdf
@@ -48,11 +50,11 @@ all: book cover
 
 book: $(OUT)/book.pdf
 book-a5: $(OUT)/book-a5.pdf
-cover: $(BUILD)/cover.pdf
-guides: $(BUILD)/cover-guides.pdf
-cover-a5: $(BUILD)/cover-a5.pdf $(BUILD)/cover-a5-guides.pdf
-cover-split: $(BUILD)/cover-split.pdf $(BUILD)/cover-split-guides.pdf
-cover-a5-split: $(BUILD)/cover-a5-split.pdf $(BUILD)/cover-a5-split-guides.pdf
+cover: $(OUT)/cover.pdf
+guides: $(OUT)/cover-guides.pdf
+cover-a5: $(OUT)/cover-a5.pdf $(OUT)/cover-a5-guides.pdf
+cover-split: $(OUT)/cover-split.pdf $(OUT)/cover-split-guides.pdf
+cover-a5-split: $(OUT)/cover-a5-split.pdf $(OUT)/cover-a5-split-guides.pdf
 figures: $(ALL_FIGURES)
 pdf: $(PDF)
 
@@ -101,65 +103,65 @@ $(OUT)/book-a5.pdf: $(OUT)/book-a5.tex $(FIGURES) $(wildcard img/shared/*)
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) $< >/dev/null
 	@pdfinfo $@ | grep -E '^(Pages|Page size)'
 
-$(BUILD)/cover.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover "\def\spine{$(SPINE)}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover "\def\coverlang{$(lang)}\def\spine{$(SPINE)}\input{book/cover.tex}" >/dev/null
 	@# second run places the overlay correctly
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover "\def\spine{$(SPINE)}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover "\def\coverlang{$(lang)}\def\spine{$(SPINE)}\input{book/cover.tex}" >/dev/null
 
-$(BUILD)/cover-guides.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-guides "\def\spine{$(SPINE)}\def\guides{}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-guides.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-guides "\def\coverlang{$(lang)}\def\spine{$(SPINE)}\def\guides{}\input{book/cover.tex}" >/dev/null
 	@# second run places the overlay correctly
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-guides "\def\spine{$(SPINE)}\def\guides{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-guides "\def\coverlang{$(lang)}\def\spine{$(SPINE)}\def\guides{}\input{book/cover.tex}" >/dev/null
 
 A5COVER = \def\spine{$(SPINE_A5)}\def\trimW{148}\def\trimH{210}
-$(BUILD)/cover-a5.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5 "$(A5COVER)\input{book/cover.tex}" >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5 "$(A5COVER)\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-a5.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5 "\def\coverlang{$(lang)}$(A5COVER)\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5 "\def\coverlang{$(lang)}$(A5COVER)\input{book/cover.tex}" >/dev/null
 
-$(BUILD)/cover-a5-guides.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5-guides "$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5-guides "$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-a5-guides.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5-guides "\def\coverlang{$(lang)}$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5-guides "\def\coverlang{$(lang)}$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
 
-$(BUILD)/cover-split.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-split "\def\split{}\input{book/cover.tex}" >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-split "\def\split{}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-split.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-split "\def\coverlang{$(lang)}\def\split{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-split "\def\coverlang{$(lang)}\def\split{}\input{book/cover.tex}" >/dev/null
 
-$(BUILD)/cover-split-guides.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-split-guides "\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-split-guides "\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-split-guides.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-split-guides "\def\coverlang{$(lang)}\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-split-guides "\def\coverlang{$(lang)}\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
 
-$(BUILD)/cover-a5-split.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5-split "$(A5COVER)\def\split{}\input{book/cover.tex}" >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5-split "$(A5COVER)\def\split{}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-a5-split.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5-split "\def\coverlang{$(lang)}$(A5COVER)\def\split{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5-split "\def\coverlang{$(lang)}$(A5COVER)\def\split{}\input{book/cover.tex}" >/dev/null
 
-$(BUILD)/cover-a5-split-guides.pdf: book/cover.tex Makefile | $(BUILD)
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5-split-guides "$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
-	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
-	  -jobname=cover-a5-split-guides "$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+$(OUT)/cover-a5-split-guides.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5-split-guides "\def\coverlang{$(lang)}$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
+	  -jobname=cover-a5-split-guides "\def\coverlang{$(lang)}$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
 
 # Reading PDF: the A5 interior with the A5 covers (split, no bleed) as its
 # first and last pages. book.tex places them when `cover` is set.
 EBOOK_COVER = $(A5COVER)\def\bleed{0}\def\split{}
-$(OUT)/ebook-cover.pdf: book/cover.tex Makefile | $(OUT)
+$(OUT)/ebook-cover.pdf: book/cover.tex $(lang)/cover-text.tex Makefile | $(OUT)
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
-	  -jobname=ebook-cover "$(EBOOK_COVER)\input{book/cover.tex}" >/dev/null
+	  -jobname=ebook-cover "\def\coverlang{$(lang)}$(EBOOK_COVER)\input{book/cover.tex}" >/dev/null
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(OUT) \
-	  -jobname=ebook-cover "$(EBOOK_COVER)\input{book/cover.tex}" >/dev/null
+	  -jobname=ebook-cover "\def\coverlang{$(lang)}$(EBOOK_COVER)\input{book/cover.tex}" >/dev/null
 
 $(OUT)/ebook.tex: $(CHAPTERS) book/book.tex book/book.lua book/layout.yaml book/layout-a5.yaml $(lang)/metadata.yaml $(FIGURES) | $(OUT)
 	pandoc $(CHAPTERS) \

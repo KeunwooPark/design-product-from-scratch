@@ -1,0 +1,29 @@
+% English cover text and fonts, read by book/cover.tex (`make cover lang=en`).
+% The layout lives in book/cover.tex; only words and fonts go here.
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\frenchspacing                 % one space after a full stop
+\newcommand\backleading{12.5}  % Latin text needs less line spacing than Korean
+
+\newcommand\booktitle{Designing a Product from Scratch}
+\newcommand\bookauthor{Keunwoo Park}
+
+% Front cover: the title as broken into lines, and the cycle diagram.
+\newcommand\fronttitle{Designing\\a Product\\from Scratch}
+\newcommand\cycledesign{Design}
+\newcommand\cyclebuild{Build}
+\newcommand\cycleevaluate{Evaluate}
+\newcommand\cyclecenter{repeat\\endlessly}
+
+% Back cover.
+\newcommand\backtext{%
+        This booklet explains how to design products with a user-centered
+        approach. Starting from understanding the situation, it moves through
+        deriving needs, sketching, and prototyping, all the way to
+        communicating the design and writing a report, so that following the
+        chapters takes you through designing one product. Finally, it looks
+        at what AI changes and what it doesn't.\par\medskip
+        \textsf{\bfseries Who it's for}\par\smallskip
+        · Students or designers who want to work as UX designers\par
+        · Developers who want to design services, not just build them\par
+        · Anyone who wants to build products in a user-centered way}

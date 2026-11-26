@@ -27,7 +27,8 @@ and `pdftocairo` (poppler) for the figure PNGs.
 | `../<lang>/metadata.yaml` | title, author, fonts, `hangul`, labels (들어가며, 목차, 차례) |
 | `book.tex` | interior layout: headings, running heads, TrimBox/BleedBox |
 | `book.lua` | Markdown → print adjustments (links → footnotes, README → preface) |
-| `cover.tex` | cover design and text |
+| `cover.tex` | cover layout |
+| `../<lang>/cover-text.tex` | cover text and fonts per language |
 | `../figures/*.tex` | diagrams (TikZ, grayscale, drawn at the 95mm text width), text in every language |
 | `cover-template.pdf` | printer's (RedPrinting) template, not committed |
 
@@ -45,8 +46,16 @@ The back cover always lands on a left-hand page, so two-page view shows the
 same spreads as the printed book. Rebuild and commit the PDF after changing
 the text: `make pdf`.
 
-The cover text is Korean only for now, so `make pdf lang=en` would put the
-Korean cover on the English book.
+`make pdf lang=en` builds the English one the same way.
+
+## Cover text
+
+`cover.tex` holds the cover layout only. The words and fonts come from
+`<lang>/cover-text.tex`: the title (and how it breaks into lines on the
+front), the author, the cycle labels, the back-cover text, and optionally
+`\backleading`, the back-cover line spacing. Every cover target takes
+`lang=` like the interior, e.g. `make cover lang=en`; covers for languages
+other than Korean go to `build/<lang>/`.
 
 ## Figures
 
