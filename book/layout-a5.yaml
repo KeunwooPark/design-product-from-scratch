@@ -1,4 +1,4 @@
-# A5 edition (148x210mm). Overrides book/metadata.yaml.
+# A5 edition (148x210mm). Overrides book/layout.yaml.
 # No bleed: the PDF page itself is an A5 sheet, e.g. for office printing.
 trim-width: 148
 trim-height: 210

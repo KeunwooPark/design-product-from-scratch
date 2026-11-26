@@ -1,0 +1,18 @@
+# Korean edition: everything that depends on the language.
+# Print layout (sizes, margins, type size) is in book/layout.yaml.
+title: 프로덕트를 처음부터 디자인하는 방법
+author: 박근우
+lang: ko
+
+# Korean typesetting: load xetexko, and set inline code and emphasis in the
+# sans-serif (gothic) face, because Korean fonts have no italics.
+hangul: true
+
+main-font: Noto Serif CJK KR
+sans-font: Noto Sans CJK KR
+mono-font: Noto Sans Mono CJK KR
+
+# Labels used by the print book.
+preface-title: 들어가며   # README.md's title is replaced with this
+readme-toc-heading: 목차  # this README section is dropped (the book has its own)
+toc-title: 차례           # heading of the book's table of contents

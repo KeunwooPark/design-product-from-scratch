@@ -1,25 +1,34 @@
 -- Pandoc filter that adapts the web (GitHub) Markdown for print.
 --
--- * README.md becomes the preface: its title becomes "들어가며" and the
---   "목차" (table of contents) section is dropped, since the book has its own.
+-- * README.md becomes the preface: its title becomes `preface-title` and its
+--   `readme-toc-heading` section (the table of contents) is dropped, since the
+--   book has its own. Both come from <lang>/metadata.yaml.
 -- * "# Chapter N: title" headings lose the "Chapter N:" prefix; LaTeX numbers
 --   the chapters itself.
 -- * External links become footnotes with the URL (paper is not clickable).
 -- * Links to other chapters / mailto links keep only their text.
--- * Diagrams referenced as img/<name>.png use img/<name>.pdf instead when it
+-- * Diagrams referenced as ../img/<name>.png (relative to <lang>/, so GitHub
+--   renders them) use img/<name>.pdf instead when it
 --   exists (vector, built by `make figures` from figures/<name>.tex), scaled
 --   by the optional `figure-scale` metadata.
--- * Inline code (used for names like `경험커피`) and emphasis are set in the
---   sans-serif (gothic) face, because Korean fonts have no italics.
+-- * With `hangul: true`, inline code (used for names like `경험커피`) and
+--   emphasis are set in the sans-serif (gothic) face, because Korean fonts
+--   have no italics. Other languages keep pandoc's default (italics, \texttt).
 
 local stringify = pandoc.utils.stringify
 
 local book_title = nil
 local figure_scale = nil -- optional `figure-scale` metadata (e.g. the B5 edition)
-local dropping = false -- true while inside the README "목차" section
+local preface_title = nil -- `preface-title` metadata, e.g. "들어가며"
+local readme_toc_heading = nil -- `readme-toc-heading` metadata, e.g. "목차"
+local hangul = false -- `hangul` metadata
+local dropping = false -- true while inside the README table of contents
 
 function Meta(meta)
   book_title = stringify(meta.title or "")
+  preface_title = stringify(meta["preface-title"] or "")
+  readme_toc_heading = stringify(meta["readme-toc-heading"] or "")
+  hangul = meta.hangul == true
   if meta["figure-scale"] then
     figure_scale = tonumber(stringify(meta["figure-scale"]))
   end
@@ -43,16 +52,16 @@ function Pandoc(doc)
       if b.level == 1 then
         dropping = false
         if text == book_title then
-          b.content = pandoc.Inlines({ pandoc.Str("들어가며") })
+          b.content = pandoc.Inlines({ pandoc.Str(preface_title) })
           b.classes:insert("unnumbered")
           out:insert(b)
           -- unnumbered chapters do not set the running head by themselves
-          b = pandoc.RawBlock("latex", "\\markboth{들어가며}{들어가며}")
+          b = pandoc.RawBlock("latex", "\\markboth{" .. preface_title .. "}{" .. preface_title .. "}")
         else
           b.content = strip_chapter_prefix(b.content)
         end
       elseif b.level == 2 then
-        dropping = (text == "목차")
+        dropping = (readme_toc_heading ~= "" and text == readme_toc_heading)
       end
     end
     if not dropping then
@@ -75,14 +84,23 @@ function Link(el)
 end
 
 function Code(el)
+  if not hangul then
+    return nil
+  end
   return pandoc.RawInline("latex", "\\textsf{" .. (el.text:gsub("([%%#&_{}$])", "\\%1")) .. "}")
 end
 
 function Emph(el)
+  if not hangul then
+    return nil
+  end
   return { pandoc.RawInline("latex", "\\textsf{"), table.unpack(el.content), pandoc.RawInline("latex", "}") }
 end
 
 function Image(el)
+  -- Chapters live in <lang>/ and link ../img/; pandoc and xelatex run from
+  -- the repo root, so drop the ../ for the print book.
+  el.src = el.src:gsub("^%.%./img/", "img/")
   local base = el.src:match("^(img/.+)%.png$")
   if base then
     local f = io.open(base .. ".pdf", "r")
@@ -101,7 +119,7 @@ function Image(el)
   return el
 end
 
--- Run Meta first so book_title is known when Pandoc runs.
+-- Run Meta first so book_title and the labels are known when Pandoc runs.
 return {
   { Meta = Meta },
   { Pandoc = Pandoc },
