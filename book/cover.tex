@@ -10,19 +10,20 @@
 % Build with the Makefile: `make cover SPINE=1.36` (`make guides` adds
 % cut/spine/safe-area lines to check placement against the template).
 %
+% The words and fonts come from <lang>/cover-text.tex, chosen with
+% `\def\coverlang{en}` (default ko; the Makefile passes its `lang`).
+%
 % `\def\split{}` (see `make cover-split`) drops the spine and puts the
 % front and back covers on separate pages instead:
 %   page 1 = front, page 2 = back, each (128 + 10) x (188 + 10) mm.
 \providecommand\spine{7.85}
+\providecommand\coverlang{ko}
 
 \documentclass{article}
 \providecommand\trimW{128}   % mm, one panel
 \providecommand\trimH{188}
 \providecommand\bleed{5}  % mm; the reading PDF uses 0 (see `make pdf`)
 \newcommand\safe{8}      % keep text at least this far inside the cut line
-
-\newcommand\booktitle{프로덕트를 처음부터 디자인하는 방법}
-\newcommand\bookauthor{박근우}
 
 \usepackage{xfp}
 \ifdefined\split
@@ -39,9 +40,9 @@
 
 \usepackage[paperwidth=\pageW mm, paperheight=\pageH mm, margin=0pt]{geometry}
 \usepackage{fontspec}
-\usepackage[hangul]{xetexko}
-\setmainfont{Noto Serif CJK KR}\setmainhangulfont{Noto Serif CJK KR}
-\setsansfont{Noto Sans CJK KR}\setsanshangulfont{Noto Sans CJK KR}
+% fonts, \booktitle, \bookauthor, \fronttitle, \cycle..., \backtext
+\input{\coverlang/cover-text}
+\providecommand\backleading{14.5}  % back-cover line spacing (pt); a language may set it
 \usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
@@ -89,21 +90,21 @@
 \newcommand\frontpanel{%
     \node[anchor=north west, align=left, inner sep=0, text=ink,
           font=\sffamily\bfseries\fontsize{25}{34}\selectfont]
-      at (14, \trimH-24) {프로덕트를\\처음부터\\디자인하는 방법};
+      at (14, \trimH-24) {\fronttitle};
 
     % design -> build -> evaluate cycle (same as figures/design-cycle.tex),
     % centred across the panel and in the space between title and author
     \begin{scope}[shift={(\trimW/2,\trimH/2-29.5)}, line width=0.9pt, draw=ink,
                   every node/.style={text=ink}]
       \def\R{26}
-      \foreach \a/\t in {90/디자인, -30/구현, 210/평가}
+      \foreach \a/\t in {90/\cycledesign, -30/\cyclebuild, 210/\cycleevaluate}
         \draw (\a:\R) circle (10)
           node[font=\sffamily\bfseries\fontsize{9}{11}\selectfont] {\t};
       \foreach \s/\e in {64/-4, -56/-124, 184/116}
         \draw[-{Stealth[length=2.6mm,width=2mm]}]
           (\s:\R) arc[start angle=\s, end angle=\e, radius=\R];
       \node[align=center, font=\sffamily\fontsize{7.5}{9.5}\selectfont]
-        at (0,0) {끝없는\\반복};
+        at (0,0) {\cyclecenter};
     \end{scope}
 
     \node[anchor=south west, inner sep=0, text=ink,
@@ -112,17 +113,8 @@
 }
 \newcommand\backpanel{%
     \node[anchor=north west, text width=\fpeval{\trimW-32}mm, align=justify, inner sep=0,
-          text=ink, font=\fontsize{8.5}{14.5}\selectfont]
-      at (16, \trimH-28) {%
-        이 소책자는 사용자 중심으로 제품을 디자인하는 방법을 설명한다.
-        상황 파악에서 시작해 니즈 도출, 스케치, 프로토타이핑,
-        그리고 디자인 커뮤니케이션과 리포트 작성까지,
-        챕터를 따라가면 제품 하나를 디자인할 수 있도록 구성했다.
-        마지막으로 AI로 인해 변하는 것과 변하지 않는 것을 이야기한다.\par\medskip
-        \textsf{\bfseries 이런 분들에게}\par\smallskip
-        · UX 디자이너로 일을 하고 싶은 학생 또는 디자이너\par
-        · 구현뿐만 아니라 서비스 설계까지 하고 싶은 개발자\par
-        · 사용자 중심으로 제품을 만들고 싶은 모든 사람};
+          text=ink, font=\fontsize{8.5}{\backleading}\selectfont]
+      at (16, \trimH-28) {\backtext};
     \node[anchor=south west, inner sep=0, text=ink2,
           font=\sffamily\fontsize{7.5}{9}\selectfont]
       at (16, 16) {\booktitle\quad\bookauthor};

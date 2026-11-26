@@ -5,7 +5,7 @@
 - [웹사이트에서 읽기](https://keunwoopark.github.io/design-product-from-scratch/)
 - [한국어로 읽기](ko/README.md)
 - [Read in English](en/README.md)
-- [PDF (A5)](pdf/design-product-from-scratch-ko.pdf)
+- [PDF (A5)](pdf/design-product-from-scratch-ko.pdf) · [English PDF (A5)](pdf/design-product-from-scratch-en.pdf)
 
 ## Repository layout
 
