@@ -5,6 +5,9 @@
 #   make cover   -> build/cover.pdf  (back + spine + front, with bleed)
 #   make guides  -> build/cover-guides.pdf (cover with cut/spine lines, for checking)
 #   make cover-a5 -> build/cover-a5.pdf + build/cover-a5-guides.pdf (A5 edition)
+#   make cover-split -> build/cover-split.pdf + build/cover-split-guides.pdf
+#                    (no spine: page 1 = front, page 2 = back, with bleed)
+#   make cover-a5-split -> build/cover-a5-split.pdf + build/cover-a5-split-guides.pdf
 #   make pages   -> print the interior page count
 #   make figures -> img/<l>/<name>.pdf (print) + img/<l>/<name>.png (Markdown)
 #                   from figures/<name>.tex, for every language <l> in FIGURE_LANGS
@@ -33,7 +36,7 @@ FIGURE_LANGS := ko en
 FIGURES := $(patsubst %,img/$(lang)/%.pdf,$(FIGURE_NAMES))
 ALL_FIGURES := $(foreach l,$(FIGURE_LANGS),$(patsubst %,img/$(l)/%.pdf,$(FIGURE_NAMES)))
 
-.PHONY: all book book-a5 cover cover-a5 guides pages figures clean
+.PHONY: all book book-a5 cover cover-a5 cover-split cover-a5-split guides pages figures clean
 
 all: book cover
 
@@ -42,6 +45,8 @@ book-a5: $(OUT)/book-a5.pdf
 cover: $(BUILD)/cover.pdf
 guides: $(BUILD)/cover-guides.pdf
 cover-a5: $(BUILD)/cover-a5.pdf $(BUILD)/cover-a5-guides.pdf
+cover-split: $(BUILD)/cover-split.pdf $(BUILD)/cover-split-guides.pdf
+cover-a5-split: $(BUILD)/cover-a5-split.pdf $(BUILD)/cover-a5-split-guides.pdf
 figures: $(ALL_FIGURES)
 
 # Diagrams: vector PDF for the print book, 300dpi PNG for the Markdown.
@@ -115,6 +120,30 @@ $(BUILD)/cover-a5-guides.pdf: book/cover.tex Makefile | $(BUILD)
 	  -jobname=cover-a5-guides "$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
 	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
 	  -jobname=cover-a5-guides "$(A5COVER)\def\guides{}\input{book/cover.tex}" >/dev/null
+
+$(BUILD)/cover-split.pdf: book/cover.tex Makefile | $(BUILD)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-split "\def\split{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-split "\def\split{}\input{book/cover.tex}" >/dev/null
+
+$(BUILD)/cover-split-guides.pdf: book/cover.tex Makefile | $(BUILD)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-split-guides "\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-split-guides "\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+
+$(BUILD)/cover-a5-split.pdf: book/cover.tex Makefile | $(BUILD)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-a5-split "$(A5COVER)\def\split{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-a5-split "$(A5COVER)\def\split{}\input{book/cover.tex}" >/dev/null
+
+$(BUILD)/cover-a5-split-guides.pdf: book/cover.tex Makefile | $(BUILD)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-a5-split-guides "$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(BUILD) \
+	  -jobname=cover-a5-split-guides "$(A5COVER)\def\split{}\def\guides{}\input{book/cover.tex}" >/dev/null
 
 pages: $(OUT)/book.pdf
 	@pdfinfo $< | grep -E '^(Pages|Page size)'
