@@ -9,19 +9,27 @@
 %
 % Build with the Makefile: `make cover SPINE=1.36` (`make guides` adds
 % cut/spine/safe-area lines to check placement against the template).
+%
+% `\def\split{}` (see `make cover-split`) drops the spine and puts the
+% front and back covers on separate pages instead:
+%   page 1 = front, page 2 = back, each (128 + 10) x (188 + 10) mm.
 \providecommand\spine{7.85}
 
 \documentclass{article}
 \providecommand\trimW{128}   % mm, one panel
 \providecommand\trimH{188}
-\newcommand\bleed{5}
+\providecommand\bleed{5}  % mm; the reading PDF uses 0 (see `make pdf`)
 \newcommand\safe{8}      % keep text at least this far inside the cut line
 
 \newcommand\booktitle{프로덕트를 처음부터 디자인하는 방법}
 \newcommand\bookauthor{박근우}
 
 \usepackage{xfp}
-\edef\pageW{\fpeval{2*\trimW + \spine + 2*\bleed}}
+\ifdefined\split
+  \edef\pageW{\fpeval{\trimW + 2*\bleed}}
+\else
+  \edef\pageW{\fpeval{2*\trimW + \spine + 2*\bleed}}
+\fi
 \edef\pageH{\fpeval{\trimH + 2*\bleed}}
 % x positions (mm from the left edge of the file)
 \edef\spineL{\fpeval{\bleed + \trimW}}            % back cover | spine
@@ -54,6 +62,16 @@
 % unprinted white paper.
 \definecolor{insidebg}{cmyk}{0,0,0,0}  % white (no ink); use \colorlet{insidebg}{bg} for yellow
 
+% Cut / safe-area lines for one panel on its own page (split mode).
+\newcommand\panelguides{%
+  \ifdefined\guides
+    \begin{scope}[line width=0.25pt]
+      \draw[red] (\bleed,\bleed) rectangle (\bleed+\trimW,\topY);
+      \draw[blue, dashed] (\bleed+\safe,\bleed+\safe)
+                          rectangle (\bleed+\trimW-\safe,\topY-\safe);
+    \end{scope}
+  \fi}
+
 % Cut / spine / safe-area lines, drawn only with `make guides`.
 \newcommand\guidelines{%
   \ifdefined\guides
@@ -67,16 +85,8 @@
     \end{scope}
   \fi}
 
-\pagestyle{empty}
-\begin{document}
-\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
-    shift={(current page.south west)}]
-
-  % background: fill the whole file, including the 5mm bleed
-  \fill[bg] (0,0) rectangle (\pageW,\pageH);
-
-  % ---- front cover ------------------------------------------------------
-  \begin{scope}[shift={(\spineR,\bleed)}]
+% Panel contents, drawn from the bottom-left corner of the cut line.
+\newcommand\frontpanel{%
     \node[anchor=north west, align=left, inner sep=0, text=ink,
           font=\sffamily\bfseries\fontsize{25}{34}\selectfont]
       at (14, \trimH-24) {프로덕트를\\처음부터\\디자인하는 방법};
@@ -99,10 +109,8 @@
     \node[anchor=south west, inner sep=0, text=ink,
           font=\sffamily\fontsize{11}{14}\selectfont]
       at (14, 16) {\bookauthor};
-  \end{scope}
-
-  % ---- back cover -------------------------------------------------------
-  \begin{scope}[shift={(\bleed,\bleed)}]
+}
+\newcommand\backpanel{%
     \node[anchor=north west, text width=\fpeval{\trimW-32}mm, align=justify, inner sep=0,
           text=ink, font=\fontsize{8.5}{14.5}\selectfont]
       at (16, \trimH-28) {%
@@ -118,6 +126,45 @@
     \node[anchor=south west, inner sep=0, text=ink2,
           font=\sffamily\fontsize{7.5}{9}\selectfont]
       at (16, 16) {\booktitle\quad\bookauthor};
+}
+
+\pagestyle{empty}
+\begin{document}
+\ifdefined\split
+% ===== split mode: page 1 = front, page 2 = back, no spine ===============
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+  \fill[bg] (0,0) rectangle (\pageW,\pageH);
+  \begin{scope}[shift={(\bleed,\bleed)}]
+    \frontpanel
+  \end{scope}
+  \panelguides
+\end{tikzpicture}
+
+\newpage
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+  \fill[bg] (0,0) rectangle (\pageW,\pageH);
+  \begin{scope}[shift={(\bleed,\bleed)}]
+    \backpanel
+  \end{scope}
+  \panelguides
+\end{tikzpicture}
+\else
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+
+  % background: fill the whole file, including the 5mm bleed
+  \fill[bg] (0,0) rectangle (\pageW,\pageH);
+
+  % ---- front cover ------------------------------------------------------
+  \begin{scope}[shift={(\spineR,\bleed)}]
+    \frontpanel
+  \end{scope}
+
+  % ---- back cover -------------------------------------------------------
+  \begin{scope}[shift={(\bleed,\bleed)}]
+    \backpanel
   \end{scope}
 
   % ---- spine ------------------------------------------------------------
@@ -147,4 +194,5 @@
 
   \guidelines
 \end{tikzpicture}
+\fi
 \end{document}

@@ -7,6 +7,8 @@ folder (`ko/` by default).
 make book     # build/book.pdf   interior, 138x198mm pages (128x188 trim + 5mm bleed)
 make cover    # build/cover.pdf  back + spine + front, with 5mm bleed
 make guides   # build/cover-guides.pdf  cover with cut / spine / safe-area lines
+make cover-split     # build/cover-split.pdf  front (page 1) and back (page 2), no spine
+make pdf      # pdf/design-product-from-scratch-ko.pdf  reading PDF (A5 + covers)
 make pages    # print the interior page count
 make figures  # img/<lang>/<name>.{pdf,png} from figures/<name>.tex, for ko and en
 ```
@@ -28,6 +30,23 @@ and `pdftocairo` (poppler) for the figure PNGs.
 | `cover.tex` | cover design and text |
 | `../figures/*.tex` | diagrams (TikZ, grayscale, drawn at the 95mm text width), text in every language |
 | `cover-template.pdf` | printer's (RedPrinting) template, not committed |
+
+## Reading PDF
+
+`make pdf` builds the PDF that the website links to and commits it under
+`pdf/`: the A5 interior (`layout-a5.yaml`) with the A5 covers as its first
+and last pages. The covers are `cover.tex` in split mode with no bleed
+(`build/ebook-cover.pdf`), so they are exactly A5 like the interior.
+`book.tex` places them when the `cover` metadata is set:
+
+front cover, blank inside cover, interior, (blank), back cover
+
+The back cover always lands on a left-hand page, so two-page view shows the
+same spreads as the printed book. Rebuild and commit the PDF after changing
+the text: `make pdf`.
+
+The cover text is Korean only for now, so `make pdf lang=en` would put the
+Korean cover on the English book.
 
 ## Figures
 
