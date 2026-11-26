@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="$lang$">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+$if(is-index)$
+<title>$book-title$</title>
+$else$
+<title>$pagetitle$ · $book-title$</title>
+$endif$
+$if(site-description)$
+<meta name="description" content="$site-description$">
+$endif$
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="../style.css">
+$for(other-languages)$
+<link rel="alternate" hreflang="$other-languages.lang$" href="$other-languages.href$">
+$endfor$
+</head>
+<body>
+<a class="skip" href="#content">$site-skip$</a>
+<header class="topbar">
+  <a class="brand" href="index.html">$book-title$</a>
+  <nav class="tools" aria-label="$site-tools$">
+$for(other-languages)$
+    <a href="$other-languages.href$" hreflang="$other-languages.lang$" lang="$other-languages.lang$">$other-languages.label$</a>
+$endfor$
+$if(pdf)$
+    <a class="pdf" href="$pdf$" download>$site-pdf$</a>
+$endif$
+  </nav>
+</header>
+
+<div class="layout">
+  <details class="toc">
+    <summary>$toc-title$</summary>
+    <nav aria-label="$toc-title$">
+      <ol>
+$for(nav)$
+        <li$if(nav.current)$ class="current"$endif$><a href="$nav.href$"$if(nav.current)$ aria-current="page"$endif$>$if(nav.number)$<span class="num">$nav.number$</span>$endif$<span>$nav.label$</span></a></li>
+$endfor$
+      </ol>
+    </nav>
+  </details>
+
+  <main id="content">
+$body$
+
+    <nav class="pager" aria-label="$site-pager$">
+$if(prev)$
+      <a class="prev" href="$prev.href$" rel="prev"><small>$site-prev$</small><span>$prev.label$</span></a>
+$endif$
+$if(next)$
+      <a class="next" href="$next.href$" rel="next"><small>$site-next$</small><span>$next.label$</span></a>
+$endif$
+    </nav>
+  </main>
+</div>
+
+<script>
+  // The chapter list is a sidebar on wide screens (always open) and a
+  // collapsible menu on narrow ones. Works without JavaScript too (closed).
+  (function () {
+    var toc = document.querySelector("details.toc");
+    var wide = window.matchMedia("(min-width: 60rem)");
+    function sync() { toc.open = wide.matches; }
+    sync();
+    wide.addEventListener("change", sync);
+  })();
+</script>
+</body>
+</html>
