@@ -10,6 +10,8 @@
 #   make cover-a5-split -> build/cover-a5-split.pdf + build/cover-a5-split-guides.pdf
 #   make pdf     -> pdf/design-product-from-scratch-<lang>.pdf, the reading PDF
 #                   for the website: A5 interior with the covers, committed
+#   make site    -> build/site/, the website (GitHub Pages): every language
+#                   folder as HTML, plus img/ and pdf/. Needs only pandoc.
 #   make pages   -> print the interior page count
 #   make figures -> img/<l>/<name>.pdf (print) + img/<l>/<name>.png (Markdown)
 #                   from figures/<name>.tex, for every language <l> in FIGURE_LANGS
@@ -40,7 +42,7 @@ FIGURE_LANGS := ko en
 FIGURES := $(patsubst %,img/$(lang)/%.pdf,$(FIGURE_NAMES))
 ALL_FIGURES := $(foreach l,$(FIGURE_LANGS),$(patsubst %,img/$(l)/%.pdf,$(FIGURE_NAMES)))
 
-.PHONY: all book book-a5 cover cover-a5 cover-split cover-a5-split guides pages figures pdf clean
+.PHONY: all book book-a5 cover cover-a5 cover-split cover-a5-split guides pages figures pdf site clean
 
 all: book cover
 
@@ -179,6 +181,34 @@ $(PDF): $(OUT)/ebook.pdf
 	@mkdir -p $(dir $@)
 	cp $< $@
 	@pdfinfo $@ | grep -E '^(Pages|Page size|File size)'
+
+# Website: one page per Markdown file of every language folder (a folder
+# with metadata.yaml), laid out like the repo so relative links keep working.
+# Uses the committed PNGs and PDFs, so CI needs no TeX.
+SITE := $(BUILD)/site
+SITE_LANGS := $(patsubst %/metadata.yaml,%,$(wildcard */metadata.yaml))
+SITE_DEPS := site/template.html site/site.lua site/landing.html site/landing.lua site/style.css
+
+site: $(SITE_DEPS)
+	rm -rf $(SITE)
+	mkdir -p $(SITE)
+	@set -e; for l in $(SITE_LANGS); do \
+	  mkdir -p $(SITE)/$$l; \
+	  for f in $$l/README.md $$l/chapter*.md; do \
+	    out=$$(basename $$f .md); [ $$out = README ] && out=index; \
+	    pandoc $$f --from markdown --to html5 --standalone --wrap=none \
+	      --metadata-file $$l/metadata.yaml \
+	      --lua-filter site/site.lua --template site/template.html \
+	      -o $(SITE)/$$l/$$out.html; \
+	  done; \
+	  echo "site: $$l ($$(ls $(SITE)/$$l | wc -l) pages)"; \
+	done
+	pandoc site/landing.md --from markdown --to html5 --standalone --wrap=none \
+	  --lua-filter site/landing.lua --template site/landing.html -o $(SITE)/index.html
+	cp site/style.css $(SITE)/
+	cp -r img $(SITE)/img
+	find $(SITE)/img -name '*.pdf' -delete
+	if [ -d pdf ]; then cp -r pdf $(SITE)/pdf; fi
 
 pages: $(OUT)/book.pdf
 	@pdfinfo $< | grep -E '^(Pages|Page size)'

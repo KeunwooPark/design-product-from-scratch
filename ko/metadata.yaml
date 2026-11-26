@@ -16,3 +16,14 @@ mono-font: Noto Sans Mono CJK KR
 preface-title: 들어가며   # README.md's title is replaced with this
 readme-toc-heading: 목차  # this README section is dropped (the book has its own)
 toc-title: 차례           # heading of the book's table of contents
+
+# Website (`make site`, see site/).
+language-name: 한국어
+site-description: 사용자 중심으로 제품을 디자인하는 방법을 설명하는 소책자.
+site-read: 읽기
+site-pdf: PDF 받기 (A5)
+site-prev: 이전
+site-next: 다음
+site-skip: 본문으로 건너뛰기
+site-tools: 언어와 PDF
+site-pager: 이전 장과 다음 장

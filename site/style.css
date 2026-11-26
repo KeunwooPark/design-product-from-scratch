@@ -1,0 +1,412 @@
+/* Website styles (`make site`). Accent = the cover's yellow. */
+
+:root {
+  --bg: #ffffff;
+  --ink: #1c1b19;
+  --muted: #6c6a64;
+  --line: #e8e4d8;
+  --tint: #fdf5c4;
+  --accent: #f9dd28;
+  --accent-ink: #1c1b19;
+  --topbar: 3.25rem;
+  --sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR",
+    "Malgun Gothic", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161614;
+    --ink: #e8e6e0;
+    --muted: #a19e96;
+    --line: #2f2d28;
+    --tint: #3b3516;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--topbar) + 1rem);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  /* Korean: wrap between words, not between syllables */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 0.14em;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  background: var(--tint);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: -100vw;
+}
+
+.skip:focus {
+  left: 1rem;
+  top: 0.5rem;
+  z-index: 10;
+  background: var(--bg);
+  padding: 0.25rem 0.75rem;
+}
+
+/* ---- top bar ----------------------------------------------------------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--topbar);
+  padding: 0 1.25rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.tools {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.tools a {
+  font-size: 0.875rem;
+  line-height: 1;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tools a.pdf {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+/* ---- layout and chapter list -------------------------------------------- */
+
+.layout {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.toc summary {
+  cursor: pointer;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 0.75rem 1.5rem;
+}
+
+.toc a {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  line-height: 1.45;
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.toc a:hover {
+  color: var(--ink);
+}
+
+.toc .num {
+  flex: 0 0 1.4em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.toc .current a {
+  background: var(--tint);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+@media (min-width: 60rem) {
+  .layout {
+    display: grid;
+    grid-template-columns: 17rem minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .toc {
+    position: sticky;
+    top: var(--topbar);
+    align-self: start;
+    max-height: calc(100vh - var(--topbar));
+    overflow-y: auto;
+    border-right: 1px solid var(--line);
+  }
+
+  .toc summary {
+    display: none;
+  }
+
+  .toc ol {
+    padding-top: 1.5rem;
+  }
+
+  main {
+    margin: 0;
+    padding-top: 3rem;
+  }
+}
+
+/* ---- text -------------------------------------------------------------- */
+
+h1,
+h2,
+h3 {
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0 0 2rem;
+}
+
+/* a short yellow bar above each chapter title, like the cover */
+h1::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 0.35rem;
+  margin-bottom: 1.25rem;
+  background: var(--accent);
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin: 3rem 0 1rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  margin: 2.25rem 0 0.75rem;
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 1.25rem;
+}
+
+li {
+  margin: 0.25rem 0;
+}
+
+/* inline code marks names like `경험커피`, not code: keep the text face */
+code {
+  font-family: inherit;
+  font-size: 0.95em;
+  font-weight: 600;
+  background: var(--tint);
+  padding: 0.05em 0.3em;
+  border-radius: 4px;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 0.25rem solid var(--accent);
+  color: var(--muted);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2.5rem 0;
+}
+
+/* figures: white card, so the diagrams read well in dark mode too */
+figure {
+  margin: 2rem 0;
+}
+
+figure img,
+main img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---- previous / next --------------------------------------------------- */
+
+.pager {
+  display: flex;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.pager a {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  line-height: 1.45;
+}
+
+.pager a:hover {
+  border-color: var(--accent);
+  background: var(--tint);
+}
+
+.pager small {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.pager span {
+  font-weight: 600;
+}
+
+.pager .next {
+  text-align: right;
+  margin-left: auto;
+}
+
+/* ---- front page -------------------------------------------------------- */
+
+.landing main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 12vh 1.25rem 4rem;
+}
+
+.edition {
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 2.5rem 2.25rem 2.25rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+
+.edition h1 {
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1.3;
+  margin: 0 0 1.5rem;
+}
+
+.edition h1::before {
+  background: var(--accent-ink);
+}
+
+.edition .language {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.edition .author {
+  margin: 0 0 1.5rem;
+}
+
+.edition .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 2rem 0 0;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.65rem 1.25rem;
+  border: 1.5px solid var(--accent-ink);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.button.primary {
+  background: var(--accent-ink);
+  color: var(--accent);
+}
+
+.edition a:hover {
+  background: none;
+  opacity: 0.85;
+}
+
+/* ---- print -------------------------------------------------------------- */
+
+@media print {
+  .topbar,
+  .toc,
+  .pager,
+  .skip {
+    display: none;
+  }
+}
