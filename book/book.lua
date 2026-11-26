@@ -7,8 +7,8 @@
 --   the chapters itself.
 -- * External links become footnotes with the URL (paper is not clickable).
 -- * Links to other chapters / mailto links keep only their text.
--- * Diagrams referenced as ../img/<name>.png (relative to <lang>/, so GitHub
---   renders them) use img/<name>.pdf instead when it
+-- * Diagrams referenced as ../img/<lang>/<name>.png (relative to <lang>/, so
+--   GitHub renders them) use img/<lang>/<name>.pdf instead when it
 --   exists (vector, built by `make figures` from figures/<name>.tex), scaled
 --   by the optional `figure-scale` metadata.
 -- * With `hangul: true`, inline code (used for names like `경험커피`) and

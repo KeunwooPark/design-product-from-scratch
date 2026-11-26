@@ -4,7 +4,7 @@
 \begin{document}\begin{fig}
 \begin{tikzpicture}[
     note/.style={draw=soft, fill=lite, line width=0.4pt, text width=23mm, minimum height=10mm, inner sep=1.5mm, font=\figsmall, align=left},
-    theme/.style={draw=ink, fill=white, line width=1pt, text width=23mm, minimum height=14mm, inner sep=1.5mm, font=\figsmall\bfseries, align=left},
+    theme/.style={draw=ink, fill=white, line width=1pt, text width=23mm, minimum height=\tr{14mm}{18mm}, inner sep=1.5mm, font=\figsmall\bfseries, align=left},
     group/.style={draw=mid, dashed, line width=0.5pt, rounded corners=2mm, inner sep=1.6mm},
   ]
   \def\col#1#2#3#4#5{%
@@ -17,26 +17,26 @@
     \end{scope}
     \draw[arr, draw=mid] (g#1.north) -- (t#1.south);
   }
-  \col{0}{대기 고객이 입장 동선을 막음}
-         {음료를 기다리는 손님이 입구 앞에 서 있다}
-         {들어오던 손님이 줄 끝을 못 찾고 머뭇거린다}
-         {픽업대 앞 대기 줄과 주문 줄이 섞인다}
-  \col{1}{음료 제조와 주문 수령이 분업화가 안~됨}
-         {알바가 주문을 받다가 음료를 만들러 간다}
-         {주문이 몰리면 두 사람 모두 주문만 받는다}
-         {사장님이 혼자 음료를 만들며 주문서를 확인한다}
-  \col{2}{음료가 언제 나올지 몰라 픽업대 앞을 떠나지 못함}
-         {진동벨 없이 이름을 불러 음료를 준다}
-         {손님이 나온 음료가 자기 것인지 계속 확인한다}
-         {휴대폰을 보다 호명을 놓친 손님이 있다}
+  \col{0}{\tr{대기 고객이 입장 동선을 막음}{Waiting customers block the way in}}
+         {\tr{음료를 기다리는 손님이 입구 앞에 서 있다}{Customers waiting for drinks stand by the entrance}}
+         {\tr{들어오던 손님이 줄 끝을 못 찾고 머뭇거린다}{People coming in hesitate, unsure where the line ends}}
+         {\tr{픽업대 앞 대기 줄과 주문 줄이 섞인다}{The pickup line and the order line mix together}}
+  \col{1}{\tr{음료 제조와 주문 수령이 분업화가 안~됨}{Taking orders and making drinks aren't divided up}}
+         {\tr{알바가 주문을 받다가 음료를 만들러 간다}{The staff member stops taking orders to make drinks}}
+         {\tr{주문이 몰리면 두 사람 모두 주문만 받는다}{When orders pile up, both of them only take orders}}
+         {\tr{사장님이 혼자 음료를 만들며 주문서를 확인한다}{The owner makes drinks alone while checking the order slips}}
+  \col{2}{\tr{음료가 언제 나올지 몰라 픽업대 앞을 떠나지 못함}{Unsure when drinks are ready, customers stay at the counter}}
+         {\tr{진동벨 없이 이름을 불러 음료를 준다}{Drinks are handed out by calling names, with no buzzer}}
+         {\tr{손님이 나온 음료가 자기 것인지 계속 확인한다}{Customers keep checking whether each drink is theirs}}
+         {\tr{휴대폰을 보다 호명을 놓친 손님이 있다}{Some customers miss their name while looking at their phones}}
 
   % Legend, bottom right: solid box = theme, dashed box = observation data.
   % Right edge of the legend text lines up with the right edge of the groups.
-  \coordinate (L) at ($(g2.south east)+(-21mm,-3mm)$);
+  \coordinate (L) at ($(g2.south east)+(\tr{-21mm}{-28.5mm},-3mm)$);
   \draw[draw=ink, line width=1pt] (L) rectangle ++(6mm,-4mm);
-  \node[font=\figsmall, anchor=west] at ($(L)+(8mm,-2mm)$) {주제};
+  \node[font=\figsmall, anchor=west] at ($(L)+(8mm,-2mm)$) {\tr{주제}{Theme}};
   \draw[draw=mid, line width=0.5pt, dash pattern=on 1.2pt off 0.9pt, rounded corners=0.8mm]
     ($(L)+(0,-6mm)$) rectangle ++(6mm,-4mm);
-  \node[font=\figsmall, anchor=west] at ($(L)+(8mm,-8mm)$) {관찰 데이터};
+  \node[font=\figsmall, anchor=west] at ($(L)+(8mm,-8mm)$) {\tr{관찰 데이터}{Observation data}};
 \end{tikzpicture}
 \end{fig}\end{document}

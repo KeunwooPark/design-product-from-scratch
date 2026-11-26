@@ -5,21 +5,21 @@
     actor/.style={circle, draw=ink, line width=0.8pt, fill=lite, minimum size=14mm, font=\figtext\bfseries},
     lbl/.style={font=\figsmall, fill=white, inner sep=1pt},
   ]
-  \node[actor] (c) at (0,0)    {고객};
-  \node[actor] (a) at (36mm,0) {알바};
-  \node[actor] (o) at (72mm,0) {사장};
+  \node[actor] (c) at (0,0)    {\tr{고객}{Customer}};
+  \node[actor] (a) at (36mm,0) {\tr{알바}{Staff}};
+  \node[actor] (o) at (72mm,0) {\tr{사장}{Owner}};
 
   % order flow (bottom, left to right)
-  \draw[arr] (c.-35) to[bend right=35] node[lbl, below=1pt] {2. 주문 및 결제} (a.-145);
-  \draw[arr] (a.-35) to[bend right=35] node[lbl, below=1pt] {4. 주문 전달} (o.-145);
+  \draw[arr] (c.-35) to[bend right=35] node[lbl, below=1pt] {2. \tr{주문 및 결제}{Order and pay}} (a.-145);
+  \draw[arr] (a.-35) to[bend right=35] node[lbl, below=1pt] {4. \tr{주문 전달}{Pass on order}} (o.-145);
 
   % drink flow (top, right to left)
-  \draw[arr] (o.145) to[bend right=35] node[lbl, above=1pt] {6. 음료 전달} (a.35);
-  \draw[arr] (a.145) to[bend right=35] node[lbl, above=1pt] {7. 음료 제공} (c.35);
+  \draw[arr] (o.145) to[bend right=35] node[lbl, above=1pt] {6. \tr{음료 전달}{Hand over drink}} (a.35);
+  \draw[arr] (a.145) to[bend right=35] node[lbl, above=1pt] {7. \tr{음료 제공}{Serve drink}} (c.35);
 
   % self loops
-  \draw[arr] (c.115) to[out=110, in=70, looseness=7] node[lbl, above=0pt] {1. 주문 대기} (c.65);
-  \draw[arr] (c.205) to[out=200, in=160, looseness=7] node[lbl, left=0pt] {3. 음료 대기} (c.155);
-  \draw[arr] (o.115) to[out=110, in=70, looseness=7] node[lbl, above=0pt] {5. 음료 제조} (o.65);
+  \draw[arr] (c.115) to[out=110, in=70, looseness=7] node[lbl, above=0pt] {1. \tr{주문 대기}{Wait to order}} (c.65);
+  \draw[arr] (c.205) to[out=200, in=160, looseness=7] node[lbl, left=0pt] {3. \tr{음료 대기}{Wait for drink}} (c.155);
+  \draw[arr] (o.115) to[out=110, in=70, looseness=7] node[lbl, above=0pt] {5. \tr{음료 제조}{Make drink}} (o.65);
 \end{tikzpicture}
 \end{fig}\end{document}

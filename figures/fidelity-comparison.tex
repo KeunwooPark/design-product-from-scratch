@@ -9,29 +9,29 @@
     \pgfmathsetseed{3}
     \tikzset{hand/.style={decorate, decoration={random steps, segment length=1.6mm, amplitude=0.22mm}, line width=0.7pt, draw=ink, line cap=round, line join=round}}
     \draw[hand] (0,0) rectangle (\W,\H);
-    \node[font=\figsmall\bfseries] at (14mm,42.5mm) {경험커피};
+    \node[font=\figsmall\bfseries] at (14mm,42.5mm) {\tr{경험커피}{Experience Coffee}};
     \draw[hand] (2mm,39mm) -- (26mm,39mm);
-    \foreach \x/\t in {2/커피, 10/라떼, 18/차} {
+    \foreach \x/\t in {2/\tr{커피}{Coffee}, 10/\tr{라떼}{Latte}, 18/\tr{차}{Tea}} {
       \draw[hand] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
       \node[font=\figtiny] at (\x mm+3.75mm,35.75mm) {\t};
     }
-    \foreach \x/\y/\t in {2/19/아아, 15/19/라떼, 2/5.5/바닐라, 15/5.5/녹차} {
+    \foreach \x/\y/\t in {2/19/\tr{아아}{Iced Am.}, 15/19/\tr{라떼}{Latte}, 2/5.5/\tr{바닐라}{Vanilla}, 15/5.5/\tr{녹차}{Green tea}} {
       \draw[hand] (\x mm,\y mm+5mm) rectangle (\x mm+11mm,\y mm+13mm);
       \draw[hand] (\x mm+3mm,\y mm+7mm) -- (\x mm+4mm,\y mm+11mm) -- (\x mm+7mm,\y mm+11mm) -- (\x mm+8mm,\y mm+7mm) -- cycle;
       \node[font=\figtiny] at (\x mm+5.5mm,\y mm+2.5mm) {\t};
     }
     \draw[hand] (2mm,1.5mm) rectangle (26mm,5.5mm);
-    \node[font=\figtiny\bfseries] at (14mm,3.5mm) {주문하기};
-    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {페이퍼 프로토타입};
-    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Low-fi · 손으로 그린\\화면을 손으로 조작};
+    \node[font=\figtiny\bfseries] at (14mm,3.5mm) {\tr{주문하기}{Order}};
+    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {\tr{페이퍼 프로토타입}{Paper prototype}};
+    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Low-fi · \tr{손으로 그린\\화면을 손으로 조작}{hand-drawn\\screens, moved by hand}};
   \end{scope}
 
   % ---------------- 2. wireframe (no style) ----------------
   \begin{scope}[shift={(32.5mm,0)}, line width=0.5pt]
     \draw[ink] (0,0) rectangle (\W,\H);
     \fill[lite] (0,39mm) rectangle (\W,\H);
-    \node[font=\figtiny] at (14mm,42.5mm) {경험커피};
-    \foreach \x/\t in {2/커피, 10/라떼, 18/차} {
+    \node[font=\figtiny] at (14mm,42.5mm) {\tr{경험커피}{Experience Coffee}};
+    \foreach \x/\t in {2/\tr{커피}{Coffee}, 10/\tr{라떼}{Latte}, 18/\tr{차}{Tea}} {
       \draw[mid] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
       \node[font=\figtiny, text=mid] at (\x mm+3.75mm,35.75mm) {\t};
     }
@@ -42,18 +42,18 @@
       \fill[lite] (\x mm,\y mm+0.8mm) rectangle (\x mm+5mm,\y mm+1.8mm);
     }
     \draw[ink] (2mm,1.5mm) rectangle (26mm,5.5mm);
-    \node[font=\figtiny] at (14mm,3.5mm) {주문하기};
-    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {와이어프레임};
-    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Mid-fi · 스타일 없이\\정보 구조만};
+    \node[font=\figtiny] at (14mm,3.5mm) {\tr{주문하기}{Order}};
+    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {\tr{와이어프레임}{Wireframe}};
+    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Mid-fi · \tr{스타일 없이\\정보 구조만}{no styling,\\structure only}};
   \end{scope}
 
   % ---------------- 3. styled mid-fi ----------------
   \begin{scope}[shift={(65mm,0)}, line width=0.5pt]
     \fill[pale, rounded corners=1.5mm] (0,0) rectangle (\W,\H);
     \draw[ink, rounded corners=1.5mm] (0,0) rectangle (\W,\H);
-    \node[font=\figsmall\bfseries, anchor=west] at (2mm,42.5mm) {경험커피};
-    \node[font=\figtiny, text=mid, anchor=east] at (26mm,42.5mm) {포장 \tikz[baseline=-0.3mm]\fill[mid] (0,0.6mm) -- (1.2mm,0.6mm) -- (0.6mm,-0.2mm) -- cycle;};
-    \foreach \x/\t/\on in {2/커피/1, 10/라떼/0, 18/차/0} {
+    \node[font=\tr{\figsmall}{\figtiny}\bfseries, anchor=west] at (2mm,\tr{42.5mm}{43mm}) {\tr{경험커피}{Experience Coffee}};
+    \node[font=\tr{\figtiny}{\fontsize{4.3}{5}\selectfont}, text=mid, anchor=east] at (26mm,\tr{42.5mm}{40.4mm}) {\tr{포장}{To go} \tikz[baseline=-0.3mm]\fill[mid] (0,0.6mm) -- (1.2mm,0.6mm) -- (0.6mm,-0.2mm) -- cycle;};
+    \foreach \x/\t/\on in {2/\tr{커피}{Coffee}/1, 10/\tr{라떼}{Latte}/0, 18/\tr{차}{Tea}/0} {
       \ifnum\on=1
         \fill[ink, rounded corners=1.7mm] (\x mm,34mm) rectangle (\x mm+7.5mm,37.5mm);
         \node[font=\figtiny, text=white] at (\x mm+3.75mm,35.75mm) {\t};
@@ -62,17 +62,17 @@
         \node[font=\figtiny, text=mid] at (\x mm+3.75mm,35.75mm) {\t};
       \fi
     }
-    \foreach \x/\y/\t/\p/\c in {2/19/아이스 아메리카노/{3,500}/soft, 15/19/카페 라떼/{4,000}/lite, 2/5.5/바닐라 라떼/{4,500}/lite, 15/5.5/녹차 라떼/{4,500}/soft} {
+    \foreach \x/\y/\t/\p/\c in {2/19/\tr{아이스 아메리카노}{Iced Americano}/{3,500}/soft, 15/19/\tr{카페 라떼}{Café Latte}/{4,000}/lite, 2/5.5/\tr{바닐라 라떼}{Vanilla Latte}/{4,500}/lite, 15/5.5/\tr{녹차 라떼}{Green Tea Latte}/{4,500}/soft} {
       \fill[white, rounded corners=1mm] (\x mm-0.6mm,\y mm+0.2mm) rectangle (\x mm+11.6mm,\y mm+13.6mm);
       \fill[\c, rounded corners=0.8mm] (\x mm,\y mm+5mm) rectangle (\x mm+11mm,\y mm+13mm);
       \fill[white] (\x mm+3.5mm,\y mm+6.5mm) -- (\x mm+4.3mm,\y mm+11mm) -- (\x mm+6.7mm,\y mm+11mm) -- (\x mm+7.5mm,\y mm+6.5mm) -- cycle;
       \node[font=\fontsize{4.3}{5}\selectfont, anchor=west, inner sep=0] at (\x mm,\y mm+3.1mm) {\t};
-      \node[font=\fontsize{4.3}{5}\selectfont\bfseries, anchor=west, inner sep=0] at (\x mm,\y mm+1.3mm) {\p원};
+      \node[font=\fontsize{4.3}{5}\selectfont\bfseries, anchor=west, inner sep=0] at (\x mm,\y mm+1.3mm) {\tr{\p원}{₩\p}};
     }
     \fill[ink, rounded corners=1mm] (2mm,1.5mm) rectangle (26mm,5.5mm);
-    \node[font=\figtiny\bfseries, text=white] at (14mm,3.5mm) {주문하기 · 0원};
-    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {스타일 적용};
-    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Mid-fi · 스타일까지\\검증할 때};
+    \node[font=\figtiny\bfseries, text=white] at (14mm,3.5mm) {\tr{주문하기 · 0원}{Order · ₩0}};
+    \node[font=\figsmall\bfseries, anchor=north, align=center] at (14mm,-2mm) {\tr{스타일 적용}{Styled}};
+    \node[font=\figtiny, text=mid, anchor=north, align=center] at (14mm,-6mm) {Mid-fi · \tr{스타일까지\\검증할 때}{for testing\\the styling too}};
   \end{scope}
 \end{tikzpicture}
 \end{fig}\end{document}
