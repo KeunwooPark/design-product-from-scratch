@@ -11,9 +11,12 @@
 --   GitHub renders them) use img/<lang>/<name>.pdf instead when it
 --   exists (vector, built by `make figures` from figures/<name>.tex), scaled
 --   by the optional `figure-scale` metadata.
--- * With `hangul: true`, inline code (used for names like `경험커피`) and
---   emphasis are set in the sans-serif (gothic) face, because Korean fonts
---   have no italics. Other languages keep pandoc's default (italics, \texttt).
+-- * Inline code marks names (`경험커피`, `design team`), not code, so it is set
+--   in the sans-serif face in every language. With `hangul: true`, emphasis
+--   is set in the sans-serif (gothic) face too, because Korean fonts have no
+--   italics; other languages keep italics.
+-- * Without `hangul`, runs of Hangul are wrapped in \texthangul when
+--   `hangul-font` is set, since the Latin font has no Hangul glyphs.
 
 local stringify = pandoc.utils.stringify
 
@@ -22,6 +25,7 @@ local figure_scale = nil -- optional `figure-scale` metadata (e.g. the B5 editio
 local preface_title = nil -- `preface-title` metadata, e.g. "들어가며"
 local readme_toc_heading = nil -- `readme-toc-heading` metadata, e.g. "목차"
 local hangul = false -- `hangul` metadata
+local hangul_font = false -- `hangul-font` metadata is set
 local dropping = false -- true while inside the README table of contents
 
 function Meta(meta)
@@ -29,6 +33,7 @@ function Meta(meta)
   preface_title = stringify(meta["preface-title"] or "")
   readme_toc_heading = stringify(meta["readme-toc-heading"] or "")
   hangul = meta.hangul == true
+  hangul_font = meta["hangul-font"] ~= nil
   if meta["figure-scale"] then
     figure_scale = tonumber(stringify(meta["figure-scale"]))
   end
@@ -84,10 +89,46 @@ function Link(el)
 end
 
 function Code(el)
-  if not hangul then
+  return pandoc.RawInline("latex", "\\textsf{" .. (el.text:gsub("([%%#&_{}$])", "\\%1")) .. "}")
+end
+
+-- Split a Str into Latin and Hangul runs; wrap the Hangul ones.
+local function is_hangul(cp)
+  return (cp >= 0xAC00 and cp <= 0xD7A3) or (cp >= 0x1100 and cp <= 0x11FF)
+    or (cp >= 0x3130 and cp <= 0x318F)
+end
+
+function Str(el)
+  if hangul or not hangul_font then
     return nil
   end
-  return pandoc.RawInline("latex", "\\textsf{" .. (el.text:gsub("([%%#&_{}$])", "\\%1")) .. "}")
+  local out, run, run_is_hangul = {}, {}, false
+  local function flush()
+    if #run > 0 then
+      local text = table.concat(run)
+      if run_is_hangul then
+        table.insert(out, pandoc.RawInline("latex", "\\texthangul{" .. text .. "}"))
+      else
+        table.insert(out, pandoc.Str(text))
+      end
+      run = {}
+    end
+  end
+  local found = false
+  for _, cp in utf8.codes(el.text) do
+    local h = is_hangul(cp)
+    found = found or h
+    if h ~= run_is_hangul then
+      flush()
+      run_is_hangul = h
+    end
+    table.insert(run, utf8.char(cp))
+  end
+  if not found then
+    return nil
+  end
+  flush()
+  return out
 end
 
 function Emph(el)
@@ -123,5 +164,5 @@ end
 return {
   { Meta = Meta },
   { Pandoc = Pandoc },
-  { Link = Link, Code = Code, Emph = Emph, Image = Image },
+  { Link = Link, Code = Code, Emph = Emph, Image = Image, Str = Str },
 }

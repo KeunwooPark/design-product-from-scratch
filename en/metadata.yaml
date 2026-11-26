@@ -1,0 +1,27 @@
+# English edition: everything that depends on the language.
+# Print layout (sizes, margins, type size) is in book/layout.yaml.
+title: Designing a Product from Scratch
+author: Keunwoo Park
+lang: en
+
+main-font: Noto Serif
+sans-font: Noto Sans
+mono-font: Noto Sans Mono
+# For the few Korean words in the text (a Korean book title in the preface).
+hangul-font: Noto Serif CJK KR
+
+# Labels used by the print book.
+preface-title: Preface    # README.md's title is replaced with this
+readme-toc-heading: Contents  # this README section is dropped (the book has its own)
+toc-title: Contents       # heading of the book's table of contents
+
+# Website (`make site`, see site/).
+language-name: English
+site-description: A short guide to designing products with a user-centered approach.
+site-read: Read
+site-pdf: Download PDF (A5)
+site-prev: Previous
+site-next: Next
+site-skip: Skip to content
+site-tools: Language and PDF
+site-pager: Previous and next chapter

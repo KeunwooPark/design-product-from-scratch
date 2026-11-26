@@ -4,6 +4,7 @@
 
 - [웹사이트에서 읽기](https://keunwoopark.github.io/design-product-from-scratch/)
 - [한국어로 읽기](ko/README.md)
+- [Read in English](en/README.md)
 - [PDF (A5)](pdf/design-product-from-scratch-ko.pdf)
 
 ## Repository layout
@@ -11,6 +12,7 @@
 | Path | Contents |
 |---|---|
 | `ko/` | Korean text: `README.md` (preface), `chapter*.md`, `metadata.yaml` |
+| `en/` | English translation, same files as `ko/` |
 | `book/` | print edition shared by all languages (see [book/README.md](book/README.md)) |
 | `figures/` | TikZ sources of the diagrams, with text in every language |
 | `img/<lang>/` | diagrams built from `figures/`, per language |

@@ -46,6 +46,11 @@ $if(hangul)$
 \setsanshangulfont{$sans-font$}
 \setmonohangulfont{$mono-font$}
 $endif$
+$if(hangul-font)$
+% Korean words in a non-Korean book (book.lua wraps them in \texthangul).
+\newfontfamily\hangulfont{$hangul-font$}
+\newcommand\texthangul[1]{{\hangulfont #1}}
+$endif$
 \renewcommand\normalsize{\fontsize{$font-size$}{$line-height$}\selectfont}
 \normalsize
 \setlength\parindent{1em}
